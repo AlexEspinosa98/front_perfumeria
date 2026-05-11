@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/alex_espinosa/Documents/personal_code/front_perfumeria/src/app/layout":["static/media/821d76e08f562279-s.p.woff2","static/media/95c8264a6767742a-s.p.woff2","static/media/313510e2713fb214-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

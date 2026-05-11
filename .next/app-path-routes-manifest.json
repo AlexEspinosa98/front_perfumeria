@@ -1,0 +1,8 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/carrito/page": "/carrito",
+  "/colecciones/[id]/page": "/colecciones/[id]",
+  "/colecciones/page": "/colecciones",
+  "/page": "/",
+  "/inventario/page": "/inventario"
+}
