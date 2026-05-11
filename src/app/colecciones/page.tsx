@@ -73,7 +73,7 @@ const allFragrances = [
 export default function ColeccionesPage() {
   return (
     <>
-      <main className="pt-section-gap min-h-screen px-margin-desktop max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-section-gap min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <header className="mb-12 border-b border-outline-variant/20 pb-stack-md">
           <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">
             Fragance Perfumería

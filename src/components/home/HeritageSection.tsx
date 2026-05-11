@@ -4,7 +4,7 @@ export default function HeritageSection() {
       id="atelier"
       className="bg-surface-container-lowest py-section-gap border-y border-outline-variant/10"
     >
-      <div className="px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-section-gap items-center">
+      <div className="px-5 md:px-20 max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-section-gap items-center">
         <div className="order-2 md:order-1">
           <img
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjovVwO7xebuEf5N2q1lfLVmswvQKGPA7dk1DYprG-1u78aWBPi6GKF9951DEJcgqzuKpYhVKrB9PwqlZF8QZRRSnfSbg9Y9klfbJERmiERWVC0bNn1YPN2EAsyJukJO4EcKvY-g940hhl1UsBA_gwGC0G37a6TQTzrVCz824Wp-wM0tRC263P4Drc_X2y6XolMH-Ej1WkcsC1x2wqtYCG2lo9FQTTmdcOHBdaCBfdT5vPiQEZBPsQ6rBfevGyEEwloKQlmwAP_HW"

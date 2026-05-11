@@ -22,7 +22,7 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <main className="pt-section-gap min-h-screen px-margin-desktop max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-section-gap min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <div className="mb-stack-lg">
           <Link
             href="/colecciones"

@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className="w-full py-section-gap border-t border-outline-variant/10 bg-surface-container-lowest">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter px-5 md:px-20 max-w-container-max mx-auto">
         <div className="col-span-1">
           <h4 className="font-serif text-headline-sm text-primary uppercase tracking-widest mb-stack-lg">
             FRAGANCE
@@ -60,7 +60,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mt-16 text-center px-margin-desktop max-w-container-max mx-auto">
+      <div className="mt-16 text-center px-5 md:px-20 max-w-container-max mx-auto">
         <p className="font-sans text-body-md text-on-surface-variant/40 border-t border-outline-variant/10 pt-stack-lg">
           © 2025 Fragance Perfumería. El Arte del Olfato Raro.
         </p>

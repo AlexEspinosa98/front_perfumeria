@@ -12,7 +12,7 @@ export default function NewsletterSection() {
   };
 
   return (
-    <section className="py-section-gap px-margin-desktop text-center max-w-3xl mx-auto">
+    <section className="py-section-gap px-5 md:px-20 text-center max-w-3xl mx-auto">
       <h3 className="font-serif text-headline-md mb-stack-md italic">
         Únete al Círculo Íntimo
       </h3>

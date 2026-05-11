@@ -42,7 +42,7 @@ export default function CarritoPage() {
 
   return (
     <>
-      <main className="pt-section-gap min-h-screen px-margin-desktop max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-section-gap min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <header className="mb-stack-lg border-b border-outline-variant/20 pb-stack-md">
           <h2 className="font-serif text-headline-lg text-primary">
             Tu Bolsa de Compra
@@ -83,7 +83,7 @@ export default function CarritoPage() {
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                       />
                     </div>
-                    <div className="flex-grow grid grid-cols-3 items-center">
+                    <div className="flex-grow grid grid-cols-1 sm:grid-cols-3 items-center gap-3 sm:gap-0">
                       <div className="col-span-1">
                         <h3 className="font-serif text-headline-sm text-on-surface mb-stack-sm">
                           {item.name}

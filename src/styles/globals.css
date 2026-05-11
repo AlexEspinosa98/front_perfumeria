@@ -2,48 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Theme: RGB channels (sin hsl/rgba wrapper) ─────────────────────────── */
+/* Dark theme – default */
+:root {
+  --c-bg:               18, 20, 20;
+  --c-surface:          18, 20, 20;
+  --c-surface-dim:      18, 20, 20;
+  --c-surface-bright:   56, 57, 57;
+  --c-surface-low:      27, 28, 28;
+  --c-surface-cnt:      31, 32, 32;
+  --c-surface-high:     41, 42, 42;
+  --c-surface-highest:  52, 53, 53;
+  --c-surface-lowest:   13, 14, 15;
+  --c-on-surface:       227, 226, 226;
+  --c-on-surface-var:   209, 197, 180;
+  --c-primary:          233, 193, 118;
+  --c-primary-dim:      233, 193, 118;
+  --c-on-primary:       65, 45, 0;
+  --c-primary-cnt:      197, 160, 89;
+  --c-outline:          154, 143, 128;
+  --c-outline-var:      78, 70, 57;
+  --c-surface-var:      52, 53, 53;
+  --c-secondary:        200, 198, 197;
+  --c-on-secondary:     49, 48, 48;
+  --c-error:            255, 180, 171;
+  --c-error-cnt:        147, 0, 10;
+  --c-on-error:         105, 0, 5;
+
+  /* Gradient */
+  --gradient-metallic: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #ffdea5 100%);
+  /* Grain overlay opacity */
+  --grain-opacity: 0.04;
+}
+
+/* Light theme */
+html.light {
+  --c-bg:               245, 240, 232;
+  --c-surface:          245, 240, 232;
+  --c-surface-dim:      229, 224, 214;
+  --c-surface-bright:   252, 249, 244;
+  --c-surface-low:      237, 232, 222;
+  --c-surface-cnt:      232, 226, 213;
+  --c-surface-high:     221, 215, 202;
+  --c-surface-highest:  212, 205, 192;
+  --c-surface-lowest:   255, 255, 255;
+  --c-on-surface:       26, 23, 20;
+  --c-on-surface-var:   74, 66, 54;
+  --c-primary:          154, 110, 21;
+  --c-primary-dim:      154, 110, 21;
+  --c-on-primary:       255, 255, 255;
+  --c-primary-cnt:      197, 160, 89;
+  --c-outline:          122, 110, 96;
+  --c-outline-var:      196, 185, 168;
+  --c-surface-var:      212, 205, 192;
+  --c-secondary:        100, 94, 88;
+  --c-on-secondary:     255, 255, 255;
+  --c-error:            186, 26, 26;
+  --c-error-cnt:        255, 218, 214;
+  --c-on-error:         255, 255, 255;
+
+  --gradient-metallic: linear-gradient(135deg, #9a6e15 0%, #7a5810 50%, #b8892a 100%);
+  --grain-opacity: 0.025;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
 @layer base {
   body {
-    @apply bg-background text-on-surface;
-    background-image: radial-gradient(
-      circle at 50% 50%,
-      rgba(255, 255, 255, 0.015) 0%,
-      transparent 100%
-    );
+    background-color: rgb(var(--c-bg));
+    color: rgb(var(--c-on-surface));
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+
   ::selection {
-    @apply bg-primary text-on-primary;
+    background-color: rgb(var(--c-primary));
+    color: rgb(var(--c-on-primary));
+  }
+
+  * {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Avoid transition flicker on page load */
+  html:not(.theme-ready) * {
+    transition: none !important;
   }
 }
 
+/* ─── Components ─────────────────────────────────────────────────────────── */
 @layer components {
   .ghost-border {
-    border: 1px solid rgba(233, 193, 118, 0.1);
+    border: 1px solid rgba(var(--c-primary), 0.1);
   }
+
   .metallic-gradient {
-    background: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #ffdea5 100%);
+    background: var(--gradient-metallic);
   }
+
   .grain-overlay {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   }
+
   .material-symbols-outlined {
     font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    font-style: normal;
   }
+
   .nav-link {
-    @apply font-sans text-label-sm uppercase tracking-[0.2em] text-on-surface/70 hover:text-primary transition-all duration-500;
+    @apply font-sans text-[12px] uppercase tracking-[0.2em] transition-all duration-500;
+    color: rgba(var(--c-on-surface), 0.7);
   }
+  .nav-link:hover {
+    color: rgb(var(--c-primary));
+  }
+
   .gold-shimmer:hover {
-    box-shadow: inset 0 0 20px rgba(233, 193, 118, 0.2);
+    box-shadow: inset 0 0 20px rgba(var(--c-primary), 0.2);
+  }
+
+  .inv-table-row {
+    border-bottom: 1px solid rgba(var(--c-outline-var), 0.15);
+    transition: background-color 0.15s ease;
+  }
+  .inv-table-row:hover {
+    background-color: rgba(var(--c-surface-cnt), 0.5);
   }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 }

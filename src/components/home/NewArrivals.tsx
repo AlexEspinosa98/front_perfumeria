@@ -26,7 +26,7 @@ const products = [
 
 export default function NewArrivals() {
   return (
-    <section className="py-section-gap px-margin-desktop max-w-container-max mx-auto">
+    <section className="py-section-gap px-5 md:px-20 max-w-container-max mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
         <div className="max-w-2xl">
           <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">

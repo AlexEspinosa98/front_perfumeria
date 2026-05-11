@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/nav/Navbar";
+import ThemeProvider from "@/components/ThemeProvider";
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
@@ -13,7 +14,7 @@ const bodoniModa = Bodoni_Moda({
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-hanken",
   display: "swap",
 });
@@ -21,7 +22,7 @@ const hankenGrotesk = Hanken_Grotesk({
 export const metadata: Metadata = {
   title: "FRAGANCE | The Art of Rare Scent",
   description:
-    "Perfumería artesanal. Fragancias de alta calidad crafted with the rarest botanical essences.",
+    "Perfumería artesanal. Fragancias de alta calidad con los mejores concentrados importados.",
 };
 
 export default function RootLayout({
@@ -30,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es" className="dark" suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"
@@ -40,9 +41,11 @@ export default function RootLayout({
       <body
         className={`${bodoniModa.variable} ${hankenGrotesk.variable} font-sans antialiased`}
       >
-        <div className="grain-overlay" aria-hidden="true" />
-        <Navbar />
-        {children}
+        <ThemeProvider>
+          <div className="grain-overlay" aria-hidden="true" />
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
