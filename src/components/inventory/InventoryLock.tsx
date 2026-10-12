@@ -96,7 +96,7 @@ export default function InventoryLock({ onSuccess }: Props) {
         </form>
 
         <p className="mt-8 text-center font-sans text-[10px] uppercase tracking-widest text-on-surface/20">
-          Bahia Perfumes · Uso interno
+          Bahía Perfumes · Uso interno
         </p>
       </div>
 

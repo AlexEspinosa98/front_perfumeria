@@ -23,7 +23,7 @@ const hankenGrotesk = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Bahia Perfumes | Especialistas en perfumería árabe",
+  title: "Bahía Perfumes | Especialistas en perfumería árabe",
   description: "Perfumería árabe, attar y oud. Haz tu pedido y confírmalo por WhatsApp.",
 };
 

@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="w-full py-16 border-t border-outline-variant bg-surface-container-low">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter px-5 md:px-12 max-w-container-max mx-auto">
         <div>
-          <h4 className="font-serif text-headline-sm uppercase mb-4">Bahia Perfumes</h4>
+          <h4 className="font-serif text-headline-sm uppercase mb-4">Bahía Perfumes</h4>
           <p className="font-sans text-body-md text-on-surface-variant">Especialistas en perfumería árabe: attar, oud y fragancias de alta fijación.</p>
         </div>
         <div className="flex flex-col gap-2">
@@ -34,7 +34,7 @@ export default function Footer() {
           ) : <span className={link}>Pedidos por WhatsApp</span>}
         </div>
       </div>
-      <p className="mt-12 text-center font-sans text-[12px] text-outline px-5">© {new Date().getFullYear()} Bahia Perfumes</p>
+      <p className="mt-12 text-center font-sans text-[12px] text-outline px-5">© {new Date().getFullYear()} Bahía Perfumes</p>
     </footer>
   );
 }

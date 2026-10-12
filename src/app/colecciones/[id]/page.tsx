@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
 
           <div className="space-y-stack-lg lg:sticky lg:top-32">
             <div>
-              <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">{p.brand || "Bahia Perfumes"}</p>
+              <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">{p.brand || "Bahía Perfumes"}</p>
               <h1 className="font-serif text-headline-lg text-on-surface mb-stack-sm">{p.name}</h1>
               {p.presentation && <p className="font-sans text-body-md text-on-surface-variant">{p.presentation}</p>}
               <div className="flex gap-2 flex-wrap mt-3">

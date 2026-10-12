@@ -59,8 +59,8 @@ function Nav() {
 
         <div className="max-w-container-max mx-auto px-5 md:px-12">
           <div className="h-16 flex items-center justify-between gap-4">
-            <button onClick={onLogo} aria-label="Bahia Perfumes – Inicio" className="font-serif text-xl md:text-2xl tracking-tight uppercase leading-none text-left select-none">
-              Bahia<br className="md:hidden" /> <span className="md:ml-1">Perfumes</span>
+            <button onClick={onLogo} aria-label="Bahía Perfumes – Inicio" className="font-serif text-xl md:text-2xl tracking-tight uppercase leading-none text-left select-none">
+              Bahía<br className="md:hidden" /> <span className="md:ml-1">Perfumes</span>
             </button>
 
             <nav className="hidden md:flex gap-8 font-sans text-[11px] uppercase tracking-[0.2em] font-semibold">
