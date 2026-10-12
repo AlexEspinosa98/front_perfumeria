@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { api } from "@/lib/api";
 import { useAuth } from "@/components/AuthProvider";
 import { useCart } from "@/components/CartProvider";
 import { useWishlist } from "@/components/WishlistProvider";
@@ -28,6 +29,15 @@ function Nav() {
   const { count } = useCart();
   const { ids } = useWishlist();
   const store = useStore();
+  const [pending, setPending] = useState(0);
+  const isAdmin = profile?.role === "admin";
+  useEffect(() => {
+    if (!isAdmin) return;
+    const load = () => api<{ pending: number }>("/admin/orders/pending-count").then((r) => setPending(r.pending)).catch(() => {});
+    load();
+    const t = setInterval(load, 60000);
+    return () => clearInterval(t);
+  }, [isAdmin]);
   const clicks = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -77,7 +87,7 @@ function Nav() {
               <Link href={profile ? "/cuenta" : "/login"} aria-label={profile ? "Mi cuenta" : "Ingresar"} className="w-8 h-8 ml-1 rounded-full bg-primary text-on-primary flex items-center justify-center">
                 <span className="material-symbols-outlined text-[18px]">person</span>
               </Link>
-              {profile?.role === "admin" && <Link href="/admin" className="hidden md:block ml-3 font-sans text-[11px] uppercase tracking-[0.2em] font-semibold hover:underline underline-offset-8">Admin</Link>}
+              {profile?.role === "admin" && <Link href="/admin" className="hidden md:block ml-3 font-sans text-[11px] uppercase tracking-[0.2em] font-semibold hover:underline underline-offset-8">Admin{pending > 0 && <span className="ml-1.5 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">{pending}</span>}</Link>}
               {profile && <button onClick={signOut} className="hidden md:block ml-3 font-sans text-[11px] uppercase tracking-[0.2em] text-outline hover:text-primary">Salir</button>}
             </div>
           </div>

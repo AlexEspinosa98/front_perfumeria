@@ -14,18 +14,18 @@ export default function CarritoPage() {
   const [notes, setNotes] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [placed, setPlaced] = useState<{ order: Order; whatsapp_url: string | null } | null>(null);
+  const [placed, setPlaced] = useState<{ order: Order; whatsapp_url: string | null; via: "reserve" | "whatsapp" } | null>(null);
 
-  const checkout = async () => {
+  const checkout = async (via: "reserve" | "whatsapp") => {
     setBusy(true); setError("");
     try {
       const res = await api<{ order: Order; whatsapp_url: string | null }>("/me/orders", {
         method: "POST",
-        json: { items: lines.map((l) => ({ perfume_id: l.id, quantity: l.qty })), notes },
+        json: { items: lines.map((l) => ({ perfume_id: l.id, quantity: l.qty })), notes, contact_via: via },
       });
       clear();
-      setPlaced(res);
-      if (res.whatsapp_url) window.open(res.whatsapp_url, "_blank");
+      setPlaced({ ...res, via });
+      if (via === "whatsapp" && res.whatsapp_url) window.open(res.whatsapp_url, "_blank");
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -39,9 +39,9 @@ export default function CarritoPage() {
         <main className="pt-[190px] min-h-screen px-5 text-center max-w-xl mx-auto pb-24">
           <span className="material-symbols-outlined text-6xl text-primary">check_circle</span>
           <h1 className="font-serif text-headline-md my-4">Pedido #{placed.order.order_number} recibido</h1>
-          <p className="text-on-surface-variant mb-8">Coordinaremos el pago y el envío por WhatsApp. Puedes seguir el estado en «Mis pedidos».</p>
+          <p className="text-on-surface-variant mb-8">{placed.via === "reserve" ? "Tu pedido quedó reservado. Te contactaremos pronto por WhatsApp o teléfono para coordinar el pago y el envío." : "Coordinaremos el pago y el envío por WhatsApp."} Puedes seguir el estado en «Mis pedidos».</p>
           <div className="flex flex-col gap-3 items-center">
-            {placed.whatsapp_url && <a href={placed.whatsapp_url} target="_blank" rel="noreferrer" className="btn-gold">Abrir WhatsApp para confirmar</a>}
+            {placed.whatsapp_url && <a href={placed.whatsapp_url} target="_blank" rel="noreferrer" className={placed.via === "reserve" ? "btn-ghost" : "btn-gold"}>{placed.via === "reserve" ? "Escribirnos ahora por WhatsApp" : "Abrir WhatsApp para confirmar"}</a>}
             <Link href={`/cuenta/pedidos/${placed.order.id}`} className="btn-ghost">Ver seguimiento</Link>
           </div>
         </main>
@@ -104,9 +104,15 @@ export default function CarritoPage() {
                 {loading ? null : !profile ? (
                   <Link href="/login?next=/carrito" className="btn-gold w-full">Ingresa para hacer el pedido</Link>
                 ) : (
-                  <button onClick={checkout} disabled={busy} className="btn-gold w-full gold-shimmer">
-                    <span className="material-symbols-outlined text-lg">chat</span>{busy ? "Enviando…" : "Hacer pedido y confirmar por WhatsApp"}
-                  </button>
+                  <div className="space-y-2">
+                    <button onClick={() => checkout("reserve")} disabled={busy} className="btn-gold w-full">
+                      <span className="material-symbols-outlined text-lg">event_available</span>{busy ? "Enviando…" : "Reservar y esperar contacto"}
+                    </button>
+                    <button onClick={() => checkout("whatsapp")} disabled={busy} className="btn-ghost w-full">
+                      <span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp ahora
+                    </button>
+                    <p className="text-[11px] text-outline">Ambas opciones guardan tu pedido. Con «Reservar» te escribimos nosotros; con «WhatsApp» abres el chat ya con el mensaje listo.</p>
+                  </div>
                 )}
                 {!profile?.phone && profile && <p className="text-xs text-on-surface-variant">Agrega tu teléfono y dirección en <Link href="/cuenta" className="text-primary">Mi cuenta</Link> para agilizar el envío.</p>}
               </div>

@@ -17,10 +17,10 @@ function OrderRow({ o, waTpls, onChanged }: { o: Order; waTpls: Tpl[]; onChanged
 
   const save = async () => {
     try {
-      const r = await api<{ email: { sent: boolean; error?: string } | null }>(`/admin/orders/${o.id}/status`, {
+      const r = await api<{ email: { sent: boolean; error?: string } | null; sale_registered?: boolean }>(`/admin/orders/${o.id}/status`, {
         method: "PATCH", json: { status, note, tracking_code: tracking || null, carrier: carrier || null, notify_email: notify },
       });
-      setMsg(r.email ? (r.email.sent ? "Actualizado y correo enviado ✓" : `Actualizado (correo no enviado: ${r.email.error})`) : "Actualizado ✓");
+      setMsg((r.email ? (r.email.sent ? "Actualizado y correo enviado ✓" : `Actualizado (correo no enviado: ${r.email.error})`) : "Actualizado ✓") + (r.sale_registered ? " · Venta registrada en contabilidad" : ""));
       setNote(""); onChanged();
     } catch (e: any) { setMsg(e.message); }
   };
@@ -34,7 +34,7 @@ function OrderRow({ o, waTpls, onChanged }: { o: Order; waTpls: Tpl[]; onChanged
       <button className="w-full flex justify-between items-center text-left gap-3" onClick={() => setOpen(!open)}>
         <div>
           <p className="font-serif text-headline-sm">#{o.order_number} · {o.profiles?.full_name || o.shipping_name}</p>
-          <p className="text-xs text-on-surface-variant">{new Date(o.created_at).toLocaleString("es-CO")} · {o.shipping_phone}</p>
+          <p className="text-xs text-on-surface-variant">{new Date(o.created_at).toLocaleString("es-CO")} · {o.shipping_phone} · {o.contact_via === "reserve" ? "📞 Quiere que lo contacten" : "💬 Escribió por WhatsApp"}</p>
         </div>
         <div className="text-right"><p className="text-primary">{cop(o.total)}</p><p className="text-[11px] uppercase tracking-widest text-on-surface-variant">{STATUS_LABELS[o.status]}</p></div>
       </button>
@@ -57,6 +57,7 @@ function OrderRow({ o, waTpls, onChanged }: { o: Order; waTpls: Tpl[]; onChanged
               <input className="field" placeholder="Transportadora" value={carrier} onChange={(e) => setCarrier(e.target.value)} />
               <input className="field" placeholder="N.º de guía" value={tracking} onChange={(e) => setTracking(e.target.value)} />
             </div>
+            <p className="text-[11px] text-outline">«Pagado» o «Entregado» registra la venta en Contabilidad. «Cancelado» devuelve el stock y anula la venta.</p>
             <label className="flex gap-2 text-sm items-center"><input type="checkbox" className="accent-[rgb(var(--c-primary))]" checked={notify} onChange={(e) => setNotify(e.target.checked)} />Avisar al cliente por correo</label>
             <button className="btn-gold" onClick={save}>Actualizar pedido</button>
             {msg && <p className="text-sm text-primary">{msg}</p>}

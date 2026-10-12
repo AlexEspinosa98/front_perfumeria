@@ -2,16 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { api } from "@/lib/api";
 import RequireAuth from "@/components/RequireAuth";
 
 const tabs = [
-  ["/admin/pedidos", "Pedidos"], ["/admin/catalogo", "Catálogo"], ["/admin/clientes", "Clientes"],
+  ["/admin/pedidos", "Pedidos"], ["/admin/catalogo", "Catálogo"], ["/admin/contabilidad", "Contabilidad"], ["/admin/clientes", "Clientes"],
   ["/admin/resenas", "Reseñas"], ["/admin/plantillas", "Plantillas"], ["/admin/campanas", "Campañas"], ["/admin/ajustes", "Ajustes"],
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const path = usePathname();
+  const [pending, setPending] = useState(0);
+  useEffect(() => {
+    const load = () => api<{ pending: number }>("/admin/orders/pending-count").then((r) => setPending(r.pending)).catch(() => {});
+    load();
+    const t = setInterval(load, 60000);
+    return () => clearInterval(t);
+  }, [path]);
   return (
     <RequireAuth admin>
       <main className="pt-[190px] min-h-screen px-5 md:px-12 max-w-container-max mx-auto pb-24">
@@ -20,7 +28,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           {tabs.map(([href, label]) => (
             <Link key={href} href={href}
               className={`px-4 py-2 border font-sans text-label-sm uppercase tracking-widest ${path.startsWith(href) ? "border-primary text-primary bg-primary/10" : "border-outline-variant/30 text-on-surface-variant hover:text-primary"}`}>
-              {label}
+              {label}{href === "/admin/pedidos" && pending > 0 && <span className="ml-2 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">{pending}</span>}
             </Link>
           ))}
         </nav>

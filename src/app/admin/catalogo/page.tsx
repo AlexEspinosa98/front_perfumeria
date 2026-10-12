@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import ProductImage from "@/components/ui/ProductImage";
 import { api, Category, cop, Perfume } from "@/lib/api";
 
-const empty = { name: "", brand: "", description: "", presentation: "", price: 0, image_url: "", badge: "", is_active: true, is_featured: false, in_stock: true, category_ids: [] as string[] };
+const empty = { name: "", brand: "", description: "", presentation: "", price: 0, image_url: "", badge: "", is_active: true, is_featured: false, stock: 0, cost: 0, category_ids: [] as string[] };
 
 export default function CatalogoAdmin() {
   const [items, setItems] = useState<Perfume[]>([]);
@@ -25,7 +25,7 @@ export default function CatalogoAdmin() {
     setMsg("");
     if (!p) { setForm({ ...empty }); setEditing("new"); return; }
     setForm({ name: p.name, brand: p.brand, description: p.description, presentation: p.presentation, price: Number(p.price),
-      image_url: p.image_url ?? "", badge: p.badge ?? "", is_active: p.is_active, is_featured: p.is_featured, in_stock: p.in_stock,
+      image_url: p.image_url ?? "", badge: p.badge ?? "", is_active: p.is_active, is_featured: p.is_featured, stock: p.stock ?? 0, cost: Number(p.cost ?? 0),
       category_ids: p.categories?.map((c) => c.id) ?? [] });
     setEditing(p.id);
   };
@@ -47,6 +47,12 @@ export default function CatalogoAdmin() {
       setEditing(null); await load();
     } catch (e: any) { setMsg(e.message); }
     setBusy(false);
+  };
+
+  const adjust = async (p: Perfume, delta: number) => {
+    const stock = Math.max(0, (p.stock ?? 0) + delta);
+    setItems((prev) => prev.map((x) => (x.id === p.id ? { ...x, stock, in_stock: stock > 0 } : x)));
+    try { await api(`/admin/perfumes/${p.id}`, { method: "PATCH", json: { stock } }); } catch (e: any) { setMsg(e.message); load(); }
   };
 
   const remove = async (p: Perfume) => {
@@ -80,7 +86,11 @@ export default function CatalogoAdmin() {
           <div><label className="field-label">Nombre</label><input className="field" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><label className="field-label">Marca</label><input className="field" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} /></div>
-            <div><label className="field-label">Precio (COP)</label><input className="field" type="number" min={0} required value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+            <div><label className="field-label">Precio de venta (COP)</label><input className="field" type="number" min={0} required value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div><label className="field-label">Costo / precio base (COP)</label><input className="field" type="number" min={0} required value={form.cost} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} /><p className="text-[11px] text-outline mt-1">Lo que te cuesta cada uno. Solo lo ves tú; sirve para calcular tu utilidad.</p></div>
+            <div><label className="field-label">Stock (unidades)</label><input className="field" type="number" min={0} required value={form.stock} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} /><p className="text-[11px] text-outline mt-1">Con 0 aparece «Agotado» solo.</p></div>
           </div>
           <div><label className="field-label">Presentación</label><input className="field" placeholder="Extrait de Parfum · 100ml" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} /></div>
           <div><label className="field-label">Descripción</label><textarea className="field" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
@@ -101,7 +111,7 @@ export default function CatalogoAdmin() {
             </div>
           </div>
           <div className="flex gap-6 text-sm">
-            {([["is_active", "Visible en el catálogo"], ["in_stock", "Disponible"], ["is_featured", "Destacado"]] as const).map(([k, label]) => (
+            {([["is_active", "Visible en el catálogo"], ["is_featured", "Destacado (carrusel del home)"]] as const).map(([k, label]) => (
               <label key={k} className="flex items-center gap-2"><input type="checkbox" className="accent-[rgb(var(--c-primary))]" checked={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.checked })} />{label}</label>
             ))}
           </div>
@@ -116,7 +126,12 @@ export default function CatalogoAdmin() {
                 <div className="w-12 h-14 bg-surface-container-lowest flex-shrink-0"><ProductImage src={p.image_url} alt="" className="w-full h-full object-contain" /></div>
                 <div className="flex-grow min-w-0">
                   <p className="font-serif truncate">{p.name} <span className="text-xs text-on-surface-variant">{p.brand}</span></p>
-                  <p className="text-xs text-on-surface-variant">{cop(p.price)} · {p.categories?.map((c) => c.name).join(", ") || "sin categoría"}{!p.is_active && " · OCULTO"}{!p.in_stock && " · AGOTADO"}</p>
+                  <p className="text-xs text-on-surface-variant">{cop(p.price)} · costo {cop(p.cost ?? 0)}{Number(p.cost ?? 0) === 0 && " ⚠️"} · {p.categories?.map((c) => c.name).join(", ") || "sin categoría"}{!p.is_active && " · OCULTO"}</p>
+                </div>
+                <div className="flex items-center gap-1" title="Stock">
+                  <button className="chip" aria-label="Quitar una unidad" onClick={() => adjust(p, -1)}>−</button>
+                  <span className={`min-w-[44px] text-center text-sm font-bold ${(p.stock ?? 0) === 0 ? "text-error" : (p.stock ?? 0) <= 3 ? "text-primary underline" : ""}`}>{p.stock ?? 0} uds</span>
+                  <button className="chip" aria-label="Agregar una unidad" onClick={() => adjust(p, 1)}>+</button>
                 </div>
                 <button className="btn-ghost" onClick={() => edit(p)}>Editar</button>
                 <button className="btn-ghost !text-error" onClick={() => remove(p)}>Eliminar</button>
