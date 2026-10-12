@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getAccessToken, refreshSession } from "./session";
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/$/, "");
 
@@ -9,22 +9,29 @@ export class ApiError extends Error {
 }
 
 export async function api<T = any>(path: string, init: RequestInit & { json?: unknown; auth?: boolean } = {}): Promise<T> {
-  const headers = new Headers(init.headers);
-  if (init.json !== undefined) headers.set("Content-Type", "application/json");
-  if (init.auth !== false) {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) headers.set("Authorization", `Bearer ${data.session.access_token}`);
+  const send = async (token: string | null) => {
+    const headers = new Headers(init.headers);
+    if (init.json !== undefined) headers.set("Content-Type", "application/json");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    return fetch(`${API_URL}${path}`, {
+      ...init,
+      headers,
+      body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
+    });
+  };
+
+  const useAuth = init.auth !== false;
+  let res = await send(useAuth ? await getAccessToken() : null);
+  if (res.status === 401 && useAuth) {
+    const s = await refreshSession(); // el token pudo vencer antes de lo esperado
+    if (s) res = await send(s.access_token);
   }
-  const res = await fetch(`${API_URL}${path}`, {
-    ...init,
-    headers,
-    body: init.json !== undefined ? JSON.stringify(init.json) : init.body,
-  });
   if (res.status === 204) return undefined as T;
   const body = await res.json().catch(() => null);
   if (!res.ok) {
     const d = body?.detail;
-    throw new ApiError(res.status, typeof d === "string" ? d : "Ocurrió un error, intenta de nuevo");
+    const msg = typeof d === "string" ? d : Array.isArray(d) ? d[0]?.msg?.replace(/^Value error, /, "") : null;
+    throw new ApiError(res.status, msg ?? "Ocurrió un error, intenta de nuevo");
   }
   return body as T;
 }

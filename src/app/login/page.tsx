@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/components/AuthProvider";
+import { api } from "@/lib/api";
 
 function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth();
   const next = useSearchParams().get("next") ?? "/cuenta";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,15 +18,18 @@ function LoginForm() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true); setError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      await login(email, password);
+      router.push(next);
+    } catch (err: any) {
+      setError(err.message);
+    }
     setBusy(false);
-    if (error) return setError("Correo o contraseña incorrectos");
-    router.push(next);
   };
 
   const reset = async () => {
     if (!email) return setError("Escribe tu correo para enviarte el enlace");
-    await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/cuenta` });
+    await api("/auth/forgot-password", { method: "POST", json: { email }, auth: false }).catch(() => {});
     setError("Si el correo existe, te enviamos un enlace para restablecer la contraseña.");
   };
 

@@ -1,14 +1,12 @@
 # front_perfumeria
 
-Tienda de perfumería (Next.js 15 + Tailwind). Se conecta a **Supabase Auth** (login/registro) y al backend **back_perfumeria** (FastAPI) para catálogo, pedidos y panel admin.
+Tienda de perfumería (Next.js 15 + Tailwind). Habla únicamente con el backend **back_perfumeria** (FastAPI): login, registro, catálogo, pedidos y panel admin. No usa Supabase directamente.
 
 ## Variables de entorno
 Copia `.env.example` a `.env.local`:
 
 | Variable | Valor |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Project Settings → API → URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Project Settings → API → anon public |
 | `NEXT_PUBLIC_API_URL` | URL del backend desplegado (sin `/` final) |
 
 ## Desarrollo
@@ -19,9 +17,9 @@ pnpm dev
 
 ## Despliegue en Vercel
 1. Importar el repo en Vercel (framework: Next.js, detectado solo).
-2. Cargar las 3 variables de arriba.
+2. Cargar `NEXT_PUBLIC_API_URL`.
 3. En el backend, poner `CORS_ORIGINS` y `FRONTEND_URL` con la URL de este sitio.
-4. En Supabase → Authentication → URL Configuration: *Site URL* = URL del sitio y agregar `https://TU-SITIO/**` en Redirect URLs.
+4. (Una vez, en Supabase del backend) Authentication → URL Configuration: *Site URL* = URL de este sitio y `https://TU-SITIO/**` en Redirect URLs, para que los enlaces de confirmar correo y recuperar contraseña (`/auth/callback`, `/restablecer`) funcionen.
 
 ## Rutas
 - Público: `/`, `/colecciones`, `/colecciones/[id]`, `/carrito`, `/login`, `/registro`, `/privacidad`

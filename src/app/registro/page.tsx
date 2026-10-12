@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
-
-const CONSENT_VERSION = "v1";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function RegistroPage() {
+  const { register } = useAuth();
   const [f, setF] = useState({ full_name: "", phone: "", email: "", password: "" });
   const [dataConsent, setDataConsent] = useState(false);
   const [marketing, setMarketing] = useState(false);
@@ -19,24 +18,17 @@ export default function RegistroPage() {
     e.preventDefault();
     if (!dataConsent) return setError("Debes autorizar el tratamiento de datos para crear tu cuenta.");
     setBusy(true); setError("");
-    const { data, error } = await supabase.auth.signUp({
-      email: f.email,
-      password: f.password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/cuenta`,
-        data: {
-          full_name: f.full_name.trim(),
-          phone: f.phone,
-          data_consent: true,
-          data_consent_version: CONSENT_VERSION,
-          marketing_consent: marketing,
-        },
-      },
-    });
+    try {
+      const { needsConfirmation } = await register({
+        email: f.email, password: f.password, full_name: f.full_name.trim(), phone: f.phone,
+        data_consent: true, marketing_consent: marketing,
+      });
+      if (needsConfirmation) setDone(true);
+      else window.location.href = "/cuenta";
+    } catch (err: any) {
+      setError(err.message);
+    }
     setBusy(false);
-    if (error) return setError(error.message.includes("registered") ? "Ese correo ya tiene una cuenta." : error.message);
-    if (data.session) window.location.href = "/cuenta";
-    else setDone(true);
   };
 
   if (done)
