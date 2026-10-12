@@ -31,10 +31,10 @@ export default function Footer() {
           <h5 className="font-sans text-label-sm uppercase text-primary mb-stack-sm tracking-widest">
             Servicio al Cliente
           </h5>
-          {["Envíos", "Devoluciones", "Política de Privacidad"].map((item) => (
+          {[["Mi cuenta", "/cuenta"], ["Mis pedidos", "/cuenta/pedidos"], ["Política de Privacidad", "/privacidad"]].map(([item, href]) => (
             <a
               key={item}
-              href="#"
+              href={href}
               className="font-sans text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300"
             >
               {item}

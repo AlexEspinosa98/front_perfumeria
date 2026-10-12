@@ -124,6 +124,23 @@ html.light {
     box-shadow: inset 0 0 20px rgba(var(--c-primary), 0.2);
   }
 
+  .field {
+    @apply w-full bg-transparent border-b py-3 font-sans text-body-md text-on-surface focus:outline-none placeholder:text-on-surface/30;
+    border-color: rgba(var(--c-outline-var), 0.6);
+  }
+  .field:focus { border-color: rgb(var(--c-primary)); }
+  .field-label {
+    @apply block font-sans text-label-sm uppercase tracking-widest text-on-surface-variant mb-1;
+  }
+  .btn-gold {
+    @apply metallic-gradient text-on-primary px-8 py-3.5 font-sans text-label-sm uppercase tracking-[0.25em] transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
+  }
+  .btn-ghost {
+    @apply px-5 py-2.5 border font-sans text-label-sm uppercase tracking-widest text-primary transition-all hover:bg-primary/10 disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
+    border-color: rgba(var(--c-primary), 0.4);
+  }
+  .panel { @apply bg-surface-container-low ghost-border p-5; }
+
   .inv-table-row {
     border-bottom: 1px solid rgba(var(--c-outline-var), 0.15);
     transition: background-color 0.15s ease;

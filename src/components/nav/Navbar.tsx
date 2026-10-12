@@ -4,11 +4,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
+import { useAuth } from "@/components/AuthProvider";
+import { useCart } from "@/components/CartProvider";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggle } = useTheme();
+  const { profile, signOut } = useAuth();
+  const { count } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const logoClickCount = useRef(0);
   const logoClickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -56,7 +60,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/colecciones", label: "Colecciones" },
-    { href: "/colecciones?filter=nuevo", label: "Novedades" },
+    { href: "/colecciones?category=nuevos", label: "Novedades" },
+    { href: "/colecciones?category=promociones", label: "Promociones" },
     { href: "/#atelier", label: "Atelier" },
   ];
 
@@ -120,15 +125,31 @@ export default function Navbar() {
               </span>
             </button>
 
-            <Link href="/carrito" aria-label="Bolsa">
+            <Link href="/carrito" aria-label="Bolsa" className="relative">
               <span className="material-symbols-outlined text-primary hover:scale-110 transition-transform text-xl">
                 shopping_bag
               </span>
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 bg-primary text-on-primary text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {count}
+                </span>
+              )}
             </Link>
 
-            <button className="text-primary cursor-pointer hover:scale-110 transition-transform hidden md:block" aria-label="Cuenta">
+            {profile?.role === "admin" && (
+              <Link href="/admin" className="nav-link hidden md:block">Admin</Link>
+            )}
+            <Link
+              href={profile ? "/cuenta" : "/login"}
+              className="text-primary hover:scale-110 transition-transform"
+              aria-label={profile ? "Mi cuenta" : "Ingresar"}
+              title={profile ? "Mi cuenta" : "Ingresar"}
+            >
               <span className="material-symbols-outlined text-xl">person</span>
-            </button>
+            </Link>
+            {profile && (
+              <button onClick={signOut} className="nav-link hidden md:block" aria-label="Salir">Salir</button>
+            )}
           </div>
         </div>
       </nav>
@@ -161,6 +182,12 @@ export default function Navbar() {
             <span className="material-symbols-outlined text-lg">shopping_bag</span>
             Mi Bolsa
           </Link>
+          <Link href={profile ? "/cuenta" : "/login"} className="font-sans text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary">
+            {profile ? "Mi cuenta" : "Ingresar"}
+          </Link>
+          {profile?.role === "admin" && (
+            <Link href="/admin" className="font-sans text-label-sm uppercase tracking-widest text-primary">Panel admin</Link>
+          )}
         </div>
       </div>
     </>

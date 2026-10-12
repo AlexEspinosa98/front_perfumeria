@@ -3,6 +3,8 @@ import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/nav/Navbar";
 import ThemeProvider from "@/components/ThemeProvider";
+import AuthProvider from "@/components/AuthProvider";
+import CartProvider from "@/components/CartProvider";
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
@@ -42,9 +44,13 @@ export default function RootLayout({
         className={`${bodoniModa.variable} ${hankenGrotesk.variable} font-sans antialiased`}
       >
         <ThemeProvider>
-          <div className="grain-overlay" aria-hidden="true" />
-          <Navbar />
-          {children}
+          <AuthProvider>
+            <CartProvider>
+              <div className="grain-overlay" aria-hidden="true" />
+              <Navbar />
+              {children}
+            </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
