@@ -1,5 +1,7 @@
 import HomeHero from "@/components/home/HomeHero";
 import FeaturedGrid from "@/components/home/FeaturedGrid";
+import ReviewsSection from "@/components/home/ReviewsSection";
+import TestimonialsGallery from "@/components/home/TestimonialsGallery";
 import Footer from "@/components/nav/Footer";
 
 export default function HomePage() {
@@ -18,6 +20,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+      <ReviewsSection />
+      <TestimonialsGallery />
       <Footer />
     </main>
   );

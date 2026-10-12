@@ -62,3 +62,9 @@ export const STATUS_LABELS: Record<string, string> = {
   preparing: "En preparación", shipped: "Enviado", delivered: "Entregado", cancelled: "Cancelado",
 };
 export const ORDER_STATUSES = Object.keys(STATUS_LABELS);
+
+export type Review = {
+  id: string; rating: number; comment: string; created_at: string; author: string;
+  perfume_id: string; perfume_name: string | null; verified: boolean;
+};
+export type Testimonial = { id: string; image_url: string; author: string; caption: string; is_active?: boolean; sort_order?: number };

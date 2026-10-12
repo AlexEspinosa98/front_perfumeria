@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/nav/Footer";
 import ProductImage from "@/components/ui/ProductImage";
 import { useCart } from "@/components/CartProvider";
+import ProductReviews from "@/components/ProductReviews";
 import { api, cop, Perfume } from "@/lib/api";
 
 export default function ProductDetailPage() {
@@ -73,6 +74,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
+        <ProductReviews perfumeId={p.id} />
       </main>
       <Footer />
     </>

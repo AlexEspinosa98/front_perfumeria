@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useStore } from "@/lib/useStore";
 
 export default function Footer() {
-  const { whatsapp_number } = useStore();
+  const { whatsapp_number, instagram_url, facebook_url } = useStore();
   const link = "font-sans text-body-md text-on-surface-variant hover:text-primary hover:underline underline-offset-4";
   return (
     <footer className="w-full py-16 border-t border-outline-variant bg-surface-container-low">
@@ -32,6 +32,16 @@ export default function Footer() {
               <span className="material-symbols-outlined text-lg">chat</span>WhatsApp
             </a>
           ) : <span className={link}>Pedidos por WhatsApp</span>}
+          {instagram_url && (
+            <a href={instagram_url} target="_blank" rel="noreferrer" className={`${link} flex items-center gap-2`}>
+              <span className="material-symbols-outlined text-lg">photo_camera</span>Instagram
+            </a>
+          )}
+          {facebook_url && (
+            <a href={facebook_url} target="_blank" rel="noreferrer" className={`${link} flex items-center gap-2`}>
+              <span className="material-symbols-outlined text-lg">public</span>Facebook
+            </a>
+          )}
         </div>
       </div>
       <p className="mt-12 text-center font-sans text-[12px] text-outline px-5">© {new Date().getFullYear()} Bahía Perfumes</p>

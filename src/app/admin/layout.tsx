@@ -7,7 +7,7 @@ import RequireAuth from "@/components/RequireAuth";
 
 const tabs = [
   ["/admin/pedidos", "Pedidos"], ["/admin/catalogo", "Catálogo"], ["/admin/clientes", "Clientes"],
-  ["/admin/plantillas", "Plantillas"], ["/admin/campanas", "Campañas"], ["/admin/ajustes", "Ajustes"],
+  ["/admin/resenas", "Reseñas"], ["/admin/plantillas", "Plantillas"], ["/admin/campanas", "Campañas"], ["/admin/ajustes", "Ajustes"],
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

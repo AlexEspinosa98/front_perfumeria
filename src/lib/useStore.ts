@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
 
-export type StoreInfo = { whatsapp_number?: string; store_name?: string; announcement?: string };
+export type StoreInfo = { whatsapp_number?: string; store_name?: string; announcement?: string; instagram_url?: string; facebook_url?: string };
 export const DEFAULT_ANNOUNCEMENT = "Envíos a todo Colombia • Pedidos y pagos por WhatsApp";
 
 let cache: StoreInfo | null = null;
