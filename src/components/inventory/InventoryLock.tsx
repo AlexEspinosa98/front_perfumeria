@@ -31,7 +31,7 @@ export default function InventoryLock({ onSuccess }: Props) {
     <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
         <span className="font-serif text-[40vw] text-primary/20 leading-none select-none">
-          F
+          B
         </span>
       </div>
 
@@ -96,7 +96,7 @@ export default function InventoryLock({ onSuccess }: Props) {
         </form>
 
         <p className="mt-8 text-center font-sans text-[10px] uppercase tracking-widest text-on-surface/20">
-          Fragance Perfumería · Uso interno
+          Bahia Perfumes · Uso interno
         </p>
       </div>
 

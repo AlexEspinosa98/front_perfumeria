@@ -12,7 +12,7 @@ function Orders() {
   useEffect(() => { api<Order[]>("/me/orders").then(setOrders).catch((e) => setError(e.message)); }, []);
 
   return (
-    <main className="pt-40 min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24">
+    <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24">
       <h1 className="font-serif text-headline-lg mb-8">Mis pedidos</h1>
       {error && <p className="text-error">{error}</p>}
       {orders === null ? <p className="text-on-surface-variant">Cargando…</p> : orders.length === 0 ? (

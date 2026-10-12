@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const path = usePathname();
   return (
     <RequireAuth admin>
-      <main className="pt-32 min-h-screen px-5 md:px-12 max-w-container-max mx-auto pb-24">
+      <main className="pt-[190px] min-h-screen px-5 md:px-12 max-w-container-max mx-auto pb-24">
         <h1 className="font-serif text-headline-md mb-5">Panel de administración</h1>
         <nav className="flex gap-2 flex-wrap border-b border-outline-variant/20 pb-4 mb-8">
           {tabs.map(([href, label]) => (

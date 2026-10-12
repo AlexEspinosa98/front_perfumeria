@@ -14,7 +14,7 @@ export default function AuthCallback() {
     window.location.replace("/cuenta");
   }, []);
   return (
-    <main className="pt-40 min-h-screen px-5 text-center text-on-surface-variant">
+    <main className="pt-[190px] min-h-screen px-5 text-center text-on-surface-variant">
       {error ? "El enlace no es válido o expiró. Intenta ingresar con tu correo y contraseña." : "Confirmando tu cuenta…"}
     </main>
   );

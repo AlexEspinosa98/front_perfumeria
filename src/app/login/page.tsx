@@ -34,7 +34,7 @@ function LoginForm() {
   };
 
   return (
-    <main className="pt-40 min-h-screen px-5 flex justify-center pb-24">
+    <main className="pt-[190px] min-h-screen px-5 flex justify-center pb-24">
       <form onSubmit={submit} className="w-full max-w-sm space-y-6">
         <h1 className="font-serif text-headline-md text-center">Ingresar</h1>
         <div><label className="field-label">Correo</label><input className="field" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></div>

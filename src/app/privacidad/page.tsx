@@ -1,13 +1,13 @@
 import Footer from "@/components/nav/Footer";
 
-export const metadata = { title: "Política de tratamiento de datos | Fragance" };
+export const metadata = { title: "Política de tratamiento de datos | Bahia Perfumes" };
 
 export default function PrivacidadPage() {
   return (
     <>
-      <main className="pt-40 min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-5 text-on-surface-variant">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-5 text-on-surface-variant">
         <h1 className="font-serif text-headline-lg text-on-surface">Política de tratamiento de datos personales</h1>
-        <p>Versión v1. En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, Fragance Perfumería (el «Responsable») informa cómo trata tus datos.</p>
+        <p>Versión v1. En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, Bahia Perfumes (el «Responsable») informa cómo trata tus datos.</p>
         <h2 className="font-serif text-headline-sm text-on-surface">Datos que recolectamos</h2>
         <p>Nombre, teléfono, correo electrónico, dirección de entrega e historial de compras.</p>
         <h2 className="font-serif text-headline-sm text-on-surface">Finalidades</h2>

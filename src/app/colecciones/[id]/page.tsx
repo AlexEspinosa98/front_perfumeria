@@ -19,8 +19,8 @@ export default function ProductDetailPage() {
     api<Perfume>(`/perfumes/${id}`, { auth: false }).then(setP).catch((e) => setError(e.message));
   }, [id]);
 
-  if (error) return <main className="pt-40 px-5 md:px-20 min-h-screen"><p className="text-error">{error}</p><Link href="/colecciones" className="text-primary">Volver al catálogo</Link></main>;
-  if (!p) return <main className="pt-40 px-5 md:px-20 min-h-screen text-on-surface-variant">Cargando…</main>;
+  if (error) return <main className="pt-[190px] px-5 md:px-20 min-h-screen"><p className="text-error">{error}</p><Link href="/colecciones" className="text-primary">Volver al catálogo</Link></main>;
+  if (!p) return <main className="pt-[190px] px-5 md:px-20 min-h-screen text-on-surface-variant">Cargando…</main>;
 
   const handleAdd = () => {
     add(p);
@@ -30,7 +30,7 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <main className="pt-40 min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <Link href="/colecciones" className="flex items-center gap-stack-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors mb-stack-lg w-fit">
           <span className="material-symbols-outlined text-lg">arrow_back</span> Catálogo
         </Link>
@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
 
           <div className="space-y-stack-lg lg:sticky lg:top-32">
             <div>
-              <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">{p.brand || "Fragance"}</p>
+              <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">{p.brand || "Bahia Perfumes"}</p>
               <h1 className="font-serif text-headline-lg text-on-surface mb-stack-sm">{p.name}</h1>
               {p.presentation && <p className="font-sans text-body-md text-on-surface-variant">{p.presentation}</p>}
               <div className="flex gap-2 flex-wrap mt-3">
@@ -65,7 +65,7 @@ export default function ProductDetailPage() {
               </div>
               <button
                 onClick={handleAdd} disabled={!p.in_stock}
-                className={`btn-gold w-full gold-shimmer ${added ? "!bg-none bg-surface-container border border-primary !text-primary" : ""}`}
+                className={`btn-gold w-full gold-shimmer ${added ? "!bg-surface border-primary !text-primary" : ""}`}
               >
                 <span className="material-symbols-outlined text-xl">{added ? "check" : "shopping_bag"}</span>
                 {!p.in_stock ? "Agotado" : added ? "Agregado" : "Agregar a la Bolsa"}

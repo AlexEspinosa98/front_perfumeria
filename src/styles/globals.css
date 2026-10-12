@@ -2,67 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Theme: RGB channels (sin hsl/rgba wrapper) ─────────────────────────── */
-/* Dark theme – default */
+/* ─── Tema: monocromo absoluto (DESIGN.md "Haute Parfumerie Monolith") ───── */
+/* Claro = por defecto */
 :root {
-  --c-bg:               18, 20, 20;
-  --c-surface:          18, 20, 20;
-  --c-surface-dim:      18, 20, 20;
-  --c-surface-bright:   56, 57, 57;
-  --c-surface-low:      27, 28, 28;
-  --c-surface-cnt:      31, 32, 32;
-  --c-surface-high:     41, 42, 42;
-  --c-surface-highest:  52, 53, 53;
-  --c-surface-lowest:   13, 14, 15;
-  --c-on-surface:       227, 226, 226;
-  --c-on-surface-var:   209, 197, 180;
-  --c-primary:          233, 193, 118;
-  --c-primary-dim:      233, 193, 118;
-  --c-on-primary:       65, 45, 0;
-  --c-primary-cnt:      197, 160, 89;
-  --c-outline:          154, 143, 128;
-  --c-outline-var:      78, 70, 57;
-  --c-surface-var:      52, 53, 53;
-  --c-secondary:        200, 198, 197;
-  --c-on-secondary:     49, 48, 48;
-  --c-error:            255, 180, 171;
-  --c-error-cnt:        147, 0, 10;
-  --c-on-error:         105, 0, 5;
-
-  /* Gradient */
-  --gradient-metallic: linear-gradient(135deg, #e9c176 0%, #c5a059 50%, #ffdea5 100%);
-  /* Grain overlay opacity */
-  --grain-opacity: 0.04;
-}
-
-/* Light theme */
-html.light {
-  --c-bg:               245, 240, 232;
-  --c-surface:          245, 240, 232;
-  --c-surface-dim:      229, 224, 214;
-  --c-surface-bright:   252, 249, 244;
-  --c-surface-low:      237, 232, 222;
-  --c-surface-cnt:      232, 226, 213;
-  --c-surface-high:     221, 215, 202;
-  --c-surface-highest:  212, 205, 192;
+  --c-bg:               255, 255, 255;
+  --c-surface:          255, 255, 255;
+  --c-surface-dim:      218, 218, 218;
+  --c-surface-bright:   255, 255, 255;
+  --c-surface-low:      245, 245, 245;
+  --c-surface-cnt:      238, 238, 238;
+  --c-surface-high:     232, 232, 232;
+  --c-surface-highest:  226, 226, 226;
   --c-surface-lowest:   255, 255, 255;
-  --c-on-surface:       26, 23, 20;
-  --c-on-surface-var:   74, 66, 54;
-  --c-primary:          154, 110, 21;
-  --c-primary-dim:      154, 110, 21;
+  --c-on-surface:       17, 17, 17;
+  --c-on-surface-var:   68, 68, 68;
+  --c-primary:          0, 0, 0;
+  --c-primary-dim:      198, 198, 198;
   --c-on-primary:       255, 255, 255;
-  --c-primary-cnt:      197, 160, 89;
-  --c-outline:          122, 110, 96;
-  --c-outline-var:      196, 185, 168;
-  --c-surface-var:      212, 205, 192;
-  --c-secondary:        100, 94, 88;
+  --c-primary-cnt:      27, 27, 27;
+  --c-outline:          115, 115, 115;
+  --c-outline-var:      229, 229, 229;
+  --c-surface-var:      226, 226, 226;
+  --c-secondary:        26, 26, 26;
   --c-on-secondary:     255, 255, 255;
   --c-error:            186, 26, 26;
   --c-error-cnt:        255, 218, 214;
   --c-on-error:         255, 255, 255;
+}
 
-  --gradient-metallic: linear-gradient(135deg, #9a6e15 0%, #7a5810 50%, #b8892a 100%);
-  --grain-opacity: 0.025;
+/* Oscuro (inversión total) */
+html.dark {
+  --c-bg:               10, 10, 10;
+  --c-surface:          10, 10, 10;
+  --c-surface-dim:      10, 10, 10;
+  --c-surface-bright:   56, 56, 56;
+  --c-surface-low:      20, 20, 20;
+  --c-surface-cnt:      26, 26, 26;
+  --c-surface-high:     34, 34, 34;
+  --c-surface-highest:  44, 44, 44;
+  --c-surface-lowest:   0, 0, 0;
+  --c-on-surface:       240, 240, 240;
+  --c-on-surface-var:   180, 180, 180;
+  --c-primary:          255, 255, 255;
+  --c-primary-dim:      198, 198, 198;
+  --c-on-primary:       0, 0, 0;
+  --c-primary-cnt:      230, 230, 230;
+  --c-outline:          140, 140, 140;
+  --c-outline-var:      64, 64, 64;
+  --c-surface-var:      44, 44, 44;
+  --c-secondary:        200, 200, 200;
+  --c-on-secondary:     0, 0, 0;
+  --c-error:            255, 180, 171;
+  --c-error-cnt:        147, 0, 10;
+  --c-on-error:         105, 0, 5;
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────── */
@@ -91,20 +83,11 @@ html.light {
 /* ─── Components ─────────────────────────────────────────────────────────── */
 @layer components {
   .ghost-border {
-    border: 1px solid rgba(var(--c-primary), 0.1);
+    border: 1px solid rgb(var(--c-outline-var));
   }
 
   .metallic-gradient {
-    background: var(--gradient-metallic);
-  }
-
-  .grain-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: var(--grain-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background: rgb(var(--c-primary));
   }
 
   .material-symbols-outlined {
@@ -126,18 +109,41 @@ html.light {
 
   .field {
     @apply w-full bg-transparent border-b py-3 font-sans text-body-md text-on-surface focus:outline-none placeholder:text-on-surface/30;
-    border-color: rgba(var(--c-outline-var), 0.6);
+    border-color: rgb(var(--c-primary));
   }
   .field:focus { border-color: rgb(var(--c-primary)); }
   .field-label {
     @apply block font-sans text-label-sm uppercase tracking-widest text-on-surface-variant mb-1;
   }
   .btn-gold {
-    @apply metallic-gradient text-on-primary px-8 py-3.5 font-sans text-label-sm uppercase tracking-[0.25em] transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
+    @apply px-8 py-3.5 font-sans text-label-sm uppercase tracking-[0.2em] transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2 border;
+    background: rgb(var(--c-primary));
+    color: rgb(var(--c-on-primary));
+    border-color: rgb(var(--c-primary));
+  }
+  .btn-gold:hover {
+    background: rgb(var(--c-bg));
+    color: rgb(var(--c-primary));
   }
   .btn-ghost {
-    @apply px-5 py-2.5 border font-sans text-label-sm uppercase tracking-widest text-primary transition-all hover:bg-primary/10 disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
-    border-color: rgba(var(--c-primary), 0.4);
+    @apply px-5 py-2.5 border font-sans text-label-sm uppercase tracking-widest transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
+    border-color: rgb(var(--c-primary));
+    color: rgb(var(--c-primary));
+  }
+  .btn-ghost:hover {
+    background: rgb(var(--c-primary));
+    color: rgb(var(--c-on-primary));
+  }
+  .chip {
+    @apply px-3 py-1.5 border font-sans text-[10px] uppercase tracking-[0.18em] font-semibold whitespace-nowrap shrink-0 transition-colors;
+    border-color: rgb(var(--c-outline-var));
+    background: rgb(var(--c-surface-low));
+    color: rgb(var(--c-primary));
+  }
+  .chip:hover, .chip-active {
+    background: rgb(var(--c-primary));
+    color: rgb(var(--c-on-primary));
+    border-color: rgb(var(--c-primary));
   }
   .panel { @apply bg-surface-container-low ghost-border p-5; }
 
@@ -151,5 +157,7 @@ html.light {
 }
 
 @layer utilities {
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
   .text-balance { text-wrap: balance; }
 }

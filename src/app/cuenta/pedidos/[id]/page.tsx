@@ -13,11 +13,11 @@ function Detail() {
   const [error, setError] = useState("");
   useEffect(() => { api<Order>(`/me/orders/${id}`).then(setO).catch((e) => setError(e.message)); }, [id]);
 
-  if (error) return <main className="pt-40 min-h-screen px-5 md:px-20 text-error">{error}</main>;
-  if (!o) return <main className="pt-40 min-h-screen px-5 md:px-20 text-on-surface-variant">Cargando…</main>;
+  if (error) return <main className="pt-[190px] min-h-screen px-5 md:px-20 text-error">{error}</main>;
+  if (!o) return <main className="pt-[190px] min-h-screen px-5 md:px-20 text-on-surface-variant">Cargando…</main>;
 
   return (
-    <main className="pt-40 min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-8">
+    <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-8">
       <Link href="/cuenta/pedidos" className="text-on-surface-variant hover:text-primary text-sm">← Mis pedidos</Link>
       <div>
         <h1 className="font-serif text-headline-lg">Pedido #{o.order_number}</h1>

@@ -41,18 +41,18 @@ const config: Config = {
         "error-container":         rgb("--c-error-cnt"),
         "on-error":                rgb("--c-on-error"),
         /* Static — no cambian entre temas */
-        "inverse-primary":         "#775a19",
+        "inverse-primary":         "#c6c6c6",
         "on-primary-fixed":        "#261900",
-        "surface-tint":            "#e9c176",
+        "surface-tint":            "#5e5e5e",
         "tertiary":                "#c8c6c5",
         "on-tertiary":             "#313030",
         "inverse-surface":         "#e3e2e2",
         "inverse-on-surface":      "#2f3031",
       },
       borderRadius: {
-        DEFAULT: "0.25rem",
-        lg: "0.5rem",
-        xl: "0.75rem",
+        DEFAULT: "0",
+        lg: "0",
+        xl: "0",
         full: "9999px",
       },
       spacing: {

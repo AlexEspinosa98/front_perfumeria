@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Footer from "@/components/nav/Footer";
-import ProductImage from "@/components/ui/ProductImage";
-import { api, Category, cop, Perfume } from "@/lib/api";
+import ProductCard from "@/components/ui/ProductCard";
+import { api, Category, Perfume } from "@/lib/api";
 
 function Catalog() {
   const router = useRouter();
@@ -43,13 +42,13 @@ function Catalog() {
 
   return (
     <>
-      <main className="pt-40 min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <header className="mb-10 border-b border-outline-variant/20 pb-stack-md">
-          <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">Fragance Perfumería</p>
+          <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">Bahia Perfumes</p>
           <h1 className="font-serif text-headline-lg text-on-surface">Nuestro Catálogo</h1>
         </header>
 
-        <form onSubmit={(e) => { e.preventDefault(); go({ q: search }); }} className="flex gap-3 mb-6 max-w-xl">
+        <form id="buscar" onSubmit={(e) => { e.preventDefault(); go({ q: search }); }} className="flex gap-3 mb-6 max-w-xl">
           <input className="field" placeholder="Buscar por nombre o marca" value={search} onChange={(e) => setSearch(e.target.value)} />
           <button className="btn-ghost" type="submit"><span className="material-symbols-outlined text-lg">search</span></button>
         </form>
@@ -59,11 +58,7 @@ function Catalog() {
             <button
               key={c.id || "all"}
               onClick={() => go({ category: c.slug })}
-              className={`font-sans text-label-sm uppercase tracking-widest px-6 py-2 border transition-all ${
-                category === c.slug
-                  ? "border-primary text-primary bg-primary/10"
-                  : "border-outline-variant/40 text-on-surface-variant hover:border-primary hover:text-primary"
-              }`}
+              className={`chip ${category === c.slug ? "chip-active" : ""}`}
             >
               {c.name}
             </button>
@@ -76,31 +71,8 @@ function Catalog() {
         ) : items.length === 0 ? (
           <p className="text-on-surface-variant">No encontramos perfumes con esos filtros.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-gutter">
-            {items.map((p) => (
-              <Link key={p.id} href={`/colecciones/${p.id}`} className="group">
-                <div className="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden ghost-border mb-stack-sm">
-                  {p.badge && (
-                    <span className="absolute top-3 left-3 z-10 font-sans text-[10px] uppercase tracking-widest bg-primary text-on-primary px-2 py-1">{p.badge}</span>
-                  )}
-                  {!p.in_stock && (
-                    <span className="absolute top-3 right-3 z-10 font-sans text-[10px] uppercase tracking-widest bg-surface-container text-on-surface-variant px-2 py-1">Agotado</span>
-                  )}
-                  <ProductImage
-                    src={p.image_url} alt={p.name}
-                    className={`w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-700 ${!p.in_stock ? "opacity-50 grayscale" : ""}`}
-                  />
-                </div>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="font-sans text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">{p.brand}</p>
-                    <h3 className="font-serif text-headline-sm group-hover:text-primary transition-colors">{p.name}</h3>
-                  </div>
-                  <span className="font-sans text-body-md text-primary font-semibold mt-1 whitespace-nowrap">{cop(p.price)}</span>
-                </div>
-                {p.presentation && <p className="font-sans text-[11px] text-on-surface-variant mt-1">{p.presentation}</p>}
-              </Link>
-            ))}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-gutter">
+            {items.map((p) => <ProductCard key={p.id} p={p} />)}
           </div>
         )}
       </main>

@@ -36,7 +36,7 @@ export default function CarritoPage() {
   if (placed)
     return (
       <>
-        <main className="pt-40 min-h-screen px-5 text-center max-w-xl mx-auto pb-24">
+        <main className="pt-[190px] min-h-screen px-5 text-center max-w-xl mx-auto pb-24">
           <span className="material-symbols-outlined text-6xl text-primary">check_circle</span>
           <h1 className="font-serif text-headline-md my-4">Pedido #{placed.order.order_number} recibido</h1>
           <p className="text-on-surface-variant mb-8">Coordinaremos el pago y el envío por WhatsApp. Puedes seguir el estado en «Mis pedidos».</p>
@@ -51,7 +51,7 @@ export default function CarritoPage() {
 
   return (
     <>
-      <main className="pt-40 min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
         <header className="mb-stack-lg border-b border-outline-variant/20 pb-stack-md">
           <h2 className="font-serif text-headline-lg text-primary">Tu Bolsa de Compra</h2>
         </header>

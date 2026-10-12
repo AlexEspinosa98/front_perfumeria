@@ -5,6 +5,7 @@ import Navbar from "@/components/nav/Navbar";
 import ThemeProvider from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
 import CartProvider from "@/components/CartProvider";
+import WishlistProvider from "@/components/WishlistProvider";
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
@@ -22,9 +23,8 @@ const hankenGrotesk = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "FRAGANCE | The Art of Rare Scent",
-  description:
-    "Perfumería artesanal. Fragancias de alta calidad con los mejores concentrados importados.",
+  title: "Bahia Perfumes | Especialistas en perfumería árabe",
+  description: "Perfumería árabe, attar y oud. Haz tu pedido y confírmalo por WhatsApp.",
 };
 
 export default function RootLayout({
@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="dark" suppressHydrationWarning>
+    <html lang="es" className="light" suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"
@@ -41,14 +41,15 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${bodoniModa.variable} ${hankenGrotesk.variable} font-sans antialiased`}
+        className={`${bodoniModa.variable} ${hankenGrotesk.variable} font-sans antialiased pb-16 md:pb-0`}
       >
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
-              <div className="grain-overlay" aria-hidden="true" />
-              <Navbar />
+              <WishlistProvider>
+                  <Navbar />
               {children}
+              </WishlistProvider>
             </CartProvider>
           </AuthProvider>
         </ThemeProvider>

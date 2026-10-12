@@ -69,7 +69,7 @@ export default function InventoryDashboard({ onLogout }: Props) {
               <span className="material-symbols-outlined text-base">restart_alt</span>
               Reset
             </button>
-            <span className="font-sans text-label-sm text-on-surface-variant uppercase tracking-widest hidden md:block">Fragance Perfumería</span>
+            <span className="font-sans text-label-sm text-on-surface-variant uppercase tracking-widest hidden md:block">Bahia Perfumes</span>
             <button onClick={onLogout}
               className="flex items-center gap-1.5 text-on-surface-variant hover:text-error transition-colors font-sans text-label-sm uppercase tracking-widest">
               <span className="material-symbols-outlined text-lg">logout</span>

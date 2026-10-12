@@ -2,7 +2,7 @@ import InventarioClient from "@/components/inventory/InventarioClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inventario | Fragance",
+  title: "Inventario | Bahia Perfumes",
   robots: { index: false, follow: false },
 };
 

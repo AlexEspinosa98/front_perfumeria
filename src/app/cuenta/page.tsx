@@ -33,13 +33,13 @@ function Account() {
   };
 
   return (
-    <main className="pt-40 min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-10">
+    <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-10">
       <div className="flex justify-between items-end flex-wrap gap-3">
         <div>
           <h1 className="font-serif text-headline-lg">Mi cuenta</h1>
           <p className="text-on-surface-variant">{profile.email}</p>
         </div>
-        <Link href="/cuenta/pedidos" className="btn-ghost">Mis pedidos</Link>
+        <div className="flex gap-2">{profile.role === "admin" && <Link href="/admin" className="btn-gold">Panel admin</Link>}<Link href="/cuenta/pedidos" className="btn-ghost">Mis pedidos</Link></div>
       </div>
 
       <form onSubmit={save} className="panel space-y-5">

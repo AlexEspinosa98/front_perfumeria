@@ -22,10 +22,10 @@ export default function RestablecerPage() {
     catch (err: any) { setError(err.message); }
   };
 
-  if (done) return <main className="pt-40 min-h-screen px-5 text-center"><p className="mb-4">Contraseña actualizada.</p><Link href="/login" className="btn-gold">Ingresar</Link></main>;
-  if (token === null) return <main className="pt-40 min-h-screen px-5 text-center text-on-surface-variant">El enlace no es válido o expiró. <Link href="/login" className="text-primary">Volver</Link></main>;
+  if (done) return <main className="pt-[190px] min-h-screen px-5 text-center"><p className="mb-4">Contraseña actualizada.</p><Link href="/login" className="btn-gold">Ingresar</Link></main>;
+  if (token === null) return <main className="pt-[190px] min-h-screen px-5 text-center text-on-surface-variant">El enlace no es válido o expiró. <Link href="/login" className="text-primary">Volver</Link></main>;
   return (
-    <main className="pt-40 min-h-screen px-5 flex justify-center">
+    <main className="pt-[190px] min-h-screen px-5 flex justify-center">
       <form onSubmit={submit} className="w-full max-w-sm space-y-6">
         <h1 className="font-serif text-headline-md text-center">Nueva contraseña</h1>
         <div><label className="field-label">Contraseña (mín. 8 caracteres)</label><input className="field" type="password" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} /></div>

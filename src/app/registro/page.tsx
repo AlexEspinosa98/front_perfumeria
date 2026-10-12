@@ -33,14 +33,14 @@ export default function RegistroPage() {
 
   if (done)
     return (
-      <main className="pt-40 min-h-screen px-5 text-center">
+      <main className="pt-[190px] min-h-screen px-5 text-center">
         <h1 className="font-serif text-headline-md mb-4">Revisa tu correo</h1>
         <p className="text-on-surface-variant">Te enviamos un enlace para confirmar tu cuenta.</p>
       </main>
     );
 
   return (
-    <main className="pt-40 min-h-screen px-5 flex justify-center pb-24">
+    <main className="pt-[190px] min-h-screen px-5 flex justify-center pb-24">
       <form onSubmit={submit} className="w-full max-w-md space-y-5">
         <h1 className="font-serif text-headline-md text-center">Crear cuenta</h1>
         <div><label className="field-label">Nombre completo</label><input className="field" required minLength={3} value={f.full_name} onChange={set("full_name")} /></div>
