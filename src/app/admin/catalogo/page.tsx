@@ -139,7 +139,7 @@ export default function CatalogoAdmin() {
             </div>
           </div>
           <div className="flex gap-6 text-sm">
-            {([["is_active", "Visible en el catálogo"], ["is_featured", "Destacado (carrusel del home)"]] as const).map(([k, label]) => (
+            {([["is_active", "Visible en el catálogo"]] as const).map(([k, label]) => (
               <label key={k} className="flex items-center gap-2"><input type="checkbox" className="accent-[rgb(var(--c-primary))]" checked={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.checked })} />{label}</label>
             ))}
           </div>

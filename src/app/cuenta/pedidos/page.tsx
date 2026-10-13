@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "@/components/nav/Footer";
 import RequireAuth from "@/components/RequireAuth";
-import { api, cop, Order, STATUS_LABELS } from "@/lib/api";
+import StatusBadge from "@/components/ui/StatusBadge";
+import { api, cop, Order } from "@/lib/api";
 
 function Orders() {
   const [orders, setOrders] = useState<Order[] | null>(null);
@@ -27,7 +28,7 @@ function Orders() {
               </div>
               <div className="text-right">
                 <p className="text-primary">{cop(o.total)}</p>
-                <p className="text-[11px] uppercase tracking-widest text-on-surface-variant">{STATUS_LABELS[o.status]}</p>
+                <StatusBadge status={o.status} className="mt-1" />
               </div>
             </Link>
           ))}

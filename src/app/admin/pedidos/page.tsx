@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import StatusBadge, { STATUS_STYLES } from "@/components/ui/StatusBadge";
 import { api, cop, Order, ORDER_STATUSES, STATUS_LABELS } from "@/lib/api";
 
 type Tpl = { id: string; name: string };
@@ -31,12 +32,12 @@ function OrderRow({ o, waTpls, onChanged }: { o: Order; waTpls: Tpl[]; onChanged
 
   return (
     <div className="panel">
-      <button className="w-full flex justify-between items-center text-left gap-3" onClick={() => setOpen(!open)}>
-        <div>
-          <p className="font-serif text-headline-sm">#{o.order_number} · {o.profiles?.full_name || o.shipping_name}</p>
+      <button className="w-full flex justify-between items-start sm:items-center text-left gap-x-3 gap-y-2 flex-wrap" onClick={() => setOpen(!open)}>
+        <div className="min-w-[60%] sm:min-w-0">
+          <p className="font-serif text-[19px] md:text-headline-sm">#{o.order_number} · {o.profiles?.full_name || o.shipping_name}</p>
           <p className="text-xs text-on-surface-variant">{new Date(o.created_at).toLocaleString("es-CO")} · {o.shipping_phone} · {o.contact_via === "reserve" ? "📞 Quiere que lo contacten" : "💬 Escribió por WhatsApp"}</p>
         </div>
-        <div className="text-right"><p className="text-primary">{cop(o.total)}</p><p className="text-[11px] uppercase tracking-widest text-on-surface-variant">{STATUS_LABELS[o.status]}</p></div>
+        <div className="sm:text-right"><p className="text-primary">{cop(o.total)}</p><StatusBadge status={o.status} className="mt-1" /></div>
       </button>
       {open && (
         <div className="mt-5 pt-5 border-t border-outline-variant/20 grid md:grid-cols-2 gap-6">
@@ -84,7 +85,7 @@ export default function PedidosAdmin() {
     <div className="space-y-4">
       <div className="flex gap-2 flex-wrap">
         {["", ...ORDER_STATUSES].map((s) => (
-          <button key={s} onClick={() => setFilter(s)} className={`px-3 py-1.5 border text-[11px] uppercase tracking-widest ${filter === s ? "border-primary text-primary bg-primary/10" : "border-outline-variant/30 text-on-surface-variant"}`}>{s ? STATUS_LABELS[s] : "Todos"}</button>
+          <button key={s} onClick={() => setFilter(s)} className={`px-3 py-1.5 border text-[11px] uppercase tracking-widest font-semibold ${s ? STATUS_STYLES[s].badge : "border-outline-variant"} ${filter === s ? "ring-2 ring-primary" : "opacity-70 hover:opacity-100"} ${s ? "" : filter === "" ? "bg-primary text-on-primary" : ""}`}>{s ? STATUS_LABELS[s] : "Todos"}</button>
         ))}
       </div>
       {error && <p className="text-error">{error}</p>}

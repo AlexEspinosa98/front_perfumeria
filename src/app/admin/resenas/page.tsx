@@ -10,6 +10,7 @@ type AdminReview = {
   profiles?: { full_name: string; email: string }; perfumes?: { name: string };
 };
 const LABEL = { pending: "Pendiente", approved: "Publicada", rejected: "Rechazada" };
+const TONE = { pending: "bg-amber-100 text-amber-900 border-amber-400", approved: "bg-green-100 text-green-900 border-green-400", rejected: "bg-red-100 text-red-900 border-red-400" };
 
 export default function ResenasAdmin() {
   const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
@@ -52,7 +53,7 @@ export default function ResenasAdmin() {
         <h2 className="font-serif text-headline-sm">Reseñas de clientes</h2>
         <p className="text-xs text-on-surface-variant">Solo compradores pueden escribirlas. Aparecen en el sitio cuando las apruebas.</p>
         <div className="flex gap-2">
-          {(["pending", "approved", "rejected"] as const).map((s) => <button key={s} onClick={() => setFilter(s)} className={`chip ${filter === s ? "chip-active" : ""}`}>{LABEL[s]}</button>)}
+          {(["pending", "approved", "rejected"] as const).map((s) => <button key={s} onClick={() => setFilter(s)} className={`px-3 py-1.5 border text-[10px] uppercase tracking-[0.15em] font-bold ${TONE[s]} ${filter === s ? "ring-2 ring-primary" : "opacity-70"}`}>{LABEL[s]}</button>)}
         </div>
         {reviews === null ? <p className="text-on-surface-variant">Cargando…</p> : reviews.length === 0 ? <p className="text-on-surface-variant">No hay reseñas {LABEL[filter].toLowerCase()}s.</p> : reviews.map((r) => (
           <div key={r.id} className="panel space-y-2">

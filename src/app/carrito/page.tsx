@@ -49,6 +49,7 @@ export default function CarritoPage() {
           <span className="material-symbols-outlined text-6xl text-primary">check_circle</span>
           <h1 className="font-serif text-headline-md my-4">Pedido #{placed.order.order_number} recibido</h1>
           <p className="text-on-surface-variant mb-8">{placed.via === "reserve" ? "Tu pedido quedó reservado. Te contactaremos pronto por WhatsApp o teléfono para coordinar el pago y el envío." : "Coordinaremos el pago y el envío por WhatsApp."} Puedes seguir el estado en «Mis pedidos».</p>
+          <ol className="text-left text-[13px] text-on-surface-variant space-y-1 max-w-sm mx-auto mb-8 list-decimal pl-5"><li>Revisamos disponibilidad.</li><li>Te contactamos por WhatsApp para confirmar pago y envío.</li><li>Te enviamos la guía de seguimiento.</li></ol>
           <div className="flex flex-col gap-3 items-center">
             {placed.whatsapp_url && <a href={placed.whatsapp_url} target="_blank" rel="noopener noreferrer" className={placed.via === "reserve" ? "btn-ghost" : "btn-gold"}>{placed.via === "reserve" ? "Escribirnos ahora por WhatsApp" : "Toca aquí para abrir WhatsApp y enviar tu pedido"}</a>}
             <Link href={`/cuenta/pedidos/${placed.order.id}`} className="btn-ghost">Ver seguimiento</Link>
@@ -83,11 +84,12 @@ export default function CarritoPage() {
                     <div>
                       <h3 className="font-serif text-headline-sm text-on-surface">{l.name}</h3>
                       <p className="font-sans text-label-sm uppercase text-primary tracking-widest">{l.presentation}</p>
+                      {l.stock !== undefined && l.qty >= l.stock && <p className="text-[11px] text-error mt-1">Máximo disponible: {l.stock}</p>}
                     </div>
                     <div className="flex justify-center items-center gap-stack-md">
                       <button onClick={() => setQty(l.id, l.qty - 1)} className="text-on-surface-variant hover:text-primary" aria-label="Quitar uno"><span className="material-symbols-outlined">remove</span></button>
                       <span className="w-8 text-center">{String(l.qty).padStart(2, "0")}</span>
-                      <button onClick={() => setQty(l.id, Math.min(50, l.qty + 1))} className="text-on-surface-variant hover:text-primary" aria-label="Agregar uno"><span className="material-symbols-outlined">add</span></button>
+                      <button onClick={() => setQty(l.id, Math.min(l.stock ?? 50, 50, l.qty + 1))} disabled={l.qty >= Math.min(l.stock ?? 50, 50)} className="text-on-surface-variant hover:text-primary disabled:opacity-30" aria-label="Agregar uno"><span className="material-symbols-outlined">add</span></button>
                     </div>
                     <div className="sm:text-right">{cop(l.price * l.qty)}</div>
                   </div>
@@ -99,7 +101,16 @@ export default function CarritoPage() {
               </Link>
             </div>
 
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-4 space-y-4">
+              <div className="border border-outline-variant p-4">
+                <p className="font-sans text-[11px] uppercase tracking-[0.18em] font-bold mb-3">¿Cómo funciona?</p>
+                <ol className="space-y-2 text-[13px] text-on-surface-variant">
+                  {[["Revisa tu bolsa", "Verifica los perfumes y las cantidades."], ["Envía tu pedido", "Por WhatsApp (sin cuenta) o reservándolo con tu cuenta."], ["Lo confirmamos contigo", "Te decimos disponibilidad, forma de pago y costo del envío."], ["Pagas y lo recibes", "Te enviamos la guía para que sigas tu paquete."]].map(([t, d], k) => (
+                    <li key={t} className="flex gap-3"><span className="shrink-0 w-5 h-5 rounded-full bg-primary text-on-primary text-[11px] font-bold flex items-center justify-center">{k + 1}</span><span><b className="text-on-surface">{t}.</b> {d}</span></li>
+                  ))}
+                </ol>
+                <p className="text-[12px] mt-3">El pago <b>no se hace en la página</b>: lo coordinamos contigo por WhatsApp.</p>
+              </div>
               <div className="bg-surface-container-low p-5 md:p-stack-lg ghost-border lg:sticky lg:top-44 space-y-5">
                 <h3 className="font-serif text-headline-sm uppercase tracking-widest pb-3 border-b border-outline-variant/20">Resumen</h3>
                 <div className="flex justify-between text-on-surface-variant"><span>Subtotal</span><span>{cop(subtotal)}</span></div>
@@ -115,11 +126,11 @@ export default function CarritoPage() {
                     <p className="font-sans text-[11px] uppercase tracking-[0.18em] font-bold">¿Cómo quieres pedir?</p>
                     <div className="space-y-2">
                       <input className="field" placeholder="Tu nombre (opcional)" maxLength={80} value={guestName} onChange={(e) => setGuestName(e.target.value)} />
-                      <a href={guestHref} target="_blank" rel="noopener noreferrer" className="btn-gold w-full"><span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp (sin registro)</a>
-                      <p className="text-[12px] text-on-surface-variant">No necesitas cuenta: se abre WhatsApp con tu pedido ya escrito y lo confirmamos por ahí.</p>
+                      <a href={guestHref} target="_blank" rel="noopener noreferrer" className="btn-gold w-full"><span className="material-symbols-outlined text-lg">chat</span>Enviar mi pedido por WhatsApp</a>
+                      <p className="text-[12px] text-on-surface-variant"><b>No necesitas cuenta.</b> Se abre WhatsApp con tu pedido ya escrito: solo toca «Enviar» y te respondemos.</p>
                     </div>
                     <div className="border-t border-outline-variant pt-3 space-y-2">
-                      <p className="text-[12px] text-on-surface-variant">O crea una cuenta para <b>reservar</b> tu pedido, ver su seguimiento y no repetir tus datos.</p>
+                      <p className="text-[12px] text-on-surface-variant">¿Prefieres tener cuenta? Con ella <b>reservas</b> tu pedido (te contactamos nosotros), ves su seguimiento y no repites tus datos.</p>
                       <div className="grid grid-cols-2 gap-2">
                         <Link href="/registro?next=/carrito" className="btn-ghost !px-3">Crear cuenta</Link>
                         <Link href="/login?next=/carrito" className="btn-ghost !px-3">Ingresar</Link>
@@ -129,12 +140,12 @@ export default function CarritoPage() {
                 ) : (
                   <div className="space-y-2">
                     <button onClick={() => checkout("reserve")} disabled={busy} className="btn-gold w-full">
-                      <span className="material-symbols-outlined text-lg">event_available</span>{busy ? "Enviando…" : "Reservar y esperar contacto"}
+                      <span className="material-symbols-outlined text-lg">event_available</span>{busy ? "Enviando…" : "Reservar mi pedido (me contactan)"}
                     </button>
                     <button onClick={() => checkout("whatsapp")} disabled={busy} className="btn-ghost w-full">
-                      <span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp ahora
+                      <span className="material-symbols-outlined text-lg">chat</span>Enviar mi pedido por WhatsApp
                     </button>
-                    <p className="text-[11px] text-outline">Ambas opciones guardan tu pedido. Con «Reservar» te escribimos nosotros; con «WhatsApp» abres el chat ya con el mensaje listo.</p>
+                    <p className="text-[11px] text-outline">Las dos opciones guardan tu pedido. <b>Reservar</b>: nosotros te escribimos. <b>WhatsApp</b>: nos escribes tú ahora, con el mensaje ya listo.</p>
                   </div>
                 )}
                 {!profile?.phone && profile && <p className="text-xs text-on-surface-variant">Agrega tu teléfono y dirección en <Link href="/cuenta" className="text-primary">Mi cuenta</Link> para agilizar el envío.</p>}

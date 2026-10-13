@@ -3,7 +3,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import type { Perfume } from "@/lib/api";
 
-export type CartLine = { id: string; name: string; price: number; image_url: string | null; presentation: string; qty: number };
+export type CartLine = { id: string; name: string; price: number; image_url: string | null; presentation: string; qty: number; stock?: number };
 
 interface CartCtx {
   lines: CartLine[];
@@ -30,9 +30,10 @@ export default function CartProvider({ children }: { children: ReactNode }) {
 
   const add = (p: Perfume, qty = 1) =>
     setLines((prev) => {
+      const cap = Math.min(50, p.stock ?? 50);
       const ex = prev.find((l) => l.id === p.id);
-      if (ex) return prev.map((l) => (l.id === p.id ? { ...l, qty: Math.min(50, l.qty + qty) } : l));
-      return [...prev, { id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url, presentation: p.presentation, qty }];
+      if (ex) return prev.map((l) => (l.id === p.id ? { ...l, stock: p.stock ?? l.stock, qty: Math.min(cap, l.qty + qty) } : l));
+      return [...prev, { id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url, presentation: p.presentation, qty: Math.min(cap, qty), stock: p.stock }];
     });
   const setQty = (id: string, qty: number) =>
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, qty } : l)).filter((l) => l.qty > 0));

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Footer from "@/components/nav/Footer";
 import RequireAuth from "@/components/RequireAuth";
+import StatusBadge, { statusDot } from "@/components/ui/StatusBadge";
 import { api, cop, Order, STATUS_LABELS } from "@/lib/api";
 
 function Detail() {
@@ -21,7 +22,7 @@ function Detail() {
       <Link href="/cuenta/pedidos" className="text-on-surface-variant hover:text-primary text-sm">← Mis pedidos</Link>
       <div>
         <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg">Pedido #{o.order_number}</h1>
-        <p className="text-primary uppercase tracking-widest text-sm">{STATUS_LABELS[o.status]}</p>
+        <StatusBadge status={o.status} className="mt-2 !text-[12px] !px-3 !py-1" />
         {o.tracking_code && <p className="text-on-surface-variant mt-1">Guía {o.carrier ? `(${o.carrier}) ` : ""}: <b>{o.tracking_code}</b></p>}
       </div>
 
@@ -30,7 +31,7 @@ function Detail() {
         <ol className="space-y-4 border-l border-primary/30 pl-5">
           {o.events?.map((e, i) => (
             <li key={i} className="relative">
-              <span className="absolute -left-[26px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary" />
+              <span className={`absolute -left-[26px] top-1.5 w-2.5 h-2.5 rounded-full ${statusDot(e.status)}`} />
               <p className="text-on-surface">{STATUS_LABELS[e.status]}</p>
               {e.note && <p className="text-sm text-on-surface-variant">{e.note}</p>}
               <p className="text-xs text-on-surface-variant/70">{new Date(e.created_at).toLocaleString("es-CO")}</p>

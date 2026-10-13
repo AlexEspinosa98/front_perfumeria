@@ -44,7 +44,8 @@ export type Perfume = {
   price: number; image_url: string | null; badge: string | null;
   is_active: boolean; is_featured: boolean; in_stock: boolean; categories?: Category[];
   images?: string[]; // hasta 3 fotos (la primera es la principal)
-  stock?: number; cost?: number; // solo las ve el admin
+  stock?: number;   // unidades disponibles (público)
+  cost?: number;    // solo lo ve el admin
 };
 export type Profile = {
   id: string; email: string; full_name: string; phone: string; role: "customer" | "admin";
@@ -58,6 +59,11 @@ export type Order = {
   contact_via?: "reserve" | "whatsapp";
   order_items: OrderItem[]; events?: { status: string; note: string; created_at: string }[];
   profiles?: { full_name: string; email: string; phone: string };
+};
+
+export type Banner = {
+  id: string; image_url: string; mobile_image_url: string | null; title: string; subtitle: string;
+  button_label: string; link_url: string; is_active?: boolean; sort_order?: number;
 };
 
 export const STATUS_LABELS: Record<string, string> = {

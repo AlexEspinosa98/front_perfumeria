@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import RequireAuth from "@/components/RequireAuth";
 
 const tabs = [
-  ["/admin/pedidos", "Pedidos"], ["/admin/catalogo", "Catálogo"], ["/admin/contabilidad", "Contabilidad"], ["/admin/clientes", "Clientes"],
+  ["/admin/pedidos", "Pedidos"], ["/admin/catalogo", "Catálogo"], ["/admin/carrusel", "Carrusel"], ["/admin/contabilidad", "Contabilidad"], ["/admin/clientes", "Clientes"],
   ["/admin/resenas", "Reseñas"], ["/admin/plantillas", "Plantillas"], ["/admin/campanas", "Campañas"], ["/admin/ajustes", "Ajustes"],
 ];
 

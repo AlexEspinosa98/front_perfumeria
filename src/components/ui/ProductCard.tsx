@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useCart } from "@/components/CartProvider";
 import { useWishlist } from "@/components/WishlistProvider";
 import ProductImage from "@/components/ui/ProductImage";
+import StockLabel from "@/components/ui/StockLabel";
 import { cop, Perfume } from "@/lib/api";
 
 export default function ProductCard({ p }: { p: Perfume }) {
@@ -50,6 +51,7 @@ export default function ProductCard({ p }: { p: Perfume }) {
         <Link href={`/colecciones/${p.id}`} className="font-serif text-[17px] leading-tight line-clamp-2 hover:underline">{p.name}</Link>
         {p.presentation && <p className="font-sans text-[12px] text-outline">{p.presentation}</p>}
         <p className="font-sans text-[18px] font-bold mt-1">{cop(p.price)}</p>
+        <StockLabel stock={p.stock} inStock={p.in_stock} />
       </div>
 
       <button

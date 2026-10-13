@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Footer from "@/components/nav/Footer";
 import Gallery from "@/components/ui/Gallery";
+import StockLabel from "@/components/ui/StockLabel";
 import { useCart } from "@/components/CartProvider";
 import ProductReviews from "@/components/ProductReviews";
 import { api, cop, Perfume } from "@/lib/api";
@@ -64,6 +65,7 @@ export default function ProductDetailPage() {
                 <span className="font-sans text-label-sm uppercase tracking-widest text-on-surface-variant">Precio</span>
                 <span className="font-serif text-headline-md text-primary">{cop(p.price)}</span>
               </div>
+              <StockLabel stock={p.stock} inStock={p.in_stock} className="-mt-3 mb-4" />
               <button
                 onClick={handleAdd} disabled={!p.in_stock}
                 className={`btn-gold w-full gold-shimmer ${added ? "!bg-surface border-primary !text-primary" : ""}`}
