@@ -36,7 +36,7 @@ function Account() {
     <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-10">
       <div className="flex justify-between items-end flex-wrap gap-3">
         <div>
-          <h1 className="font-serif text-headline-lg">Mi cuenta</h1>
+          <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg">Mi cuenta</h1>
           <p className="text-on-surface-variant">{profile.email}</p>
         </div>
         <div className="flex gap-2">{profile.role === "admin" && <Link href="/admin" className="btn-gold">Panel admin</Link>}<Link href="/cuenta/pedidos" className="btn-ghost">Mis pedidos</Link></div>

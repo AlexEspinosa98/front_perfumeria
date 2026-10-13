@@ -43,6 +43,7 @@ export type Perfume = {
   id: string; name: string; brand: string; description: string; presentation: string;
   price: number; image_url: string | null; badge: string | null;
   is_active: boolean; is_featured: boolean; in_stock: boolean; categories?: Category[];
+  images?: string[]; // hasta 3 fotos (la primera es la principal)
   stock?: number; cost?: number; // solo las ve el admin
 };
 export type Profile = {

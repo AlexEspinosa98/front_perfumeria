@@ -16,7 +16,7 @@ export default function FeaturedGrid() {
       <div className="flex items-end justify-between border-b border-outline-variant pb-3 mb-6">
         <div>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] font-semibold text-outline flex items-center gap-1.5"><span className="material-symbols-outlined text-[14px]">local_fire_department</span>Selección</p>
-          <h2 className="font-serif text-headline-md md:text-headline-lg">Los más recientes</h2>
+          <h2 className="font-serif text-headline-md md:text-headline-lg-mobile md:text-headline-lg">Los más recientes</h2>
         </div>
         <Link href="/colecciones" className="font-sans text-[11px] uppercase tracking-[0.2em] font-bold underline underline-offset-4 hover:no-underline">Ver todos →</Link>
       </div>

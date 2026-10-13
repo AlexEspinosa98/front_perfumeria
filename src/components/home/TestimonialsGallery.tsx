@@ -21,7 +21,7 @@ export default function TestimonialsGallery() {
     <section className="px-5 md:px-12 max-w-container-max mx-auto pb-14">
       <div className="border-b border-outline-variant pb-3 mb-6">
         <p className="font-sans text-[10px] uppercase tracking-[0.2em] font-semibold text-outline flex items-center gap-1.5"><span className="material-symbols-outlined text-[14px]">chat</span>Nos escriben por WhatsApp</p>
-        <h2 className="font-serif text-headline-md md:text-headline-lg">Lo que dicen nuestros clientes</h2>
+        <h2 className="font-serif text-headline-md md:text-headline-lg-mobile md:text-headline-lg">Lo que dicen nuestros clientes</h2>
       </div>
       <div className="columns-2 md:columns-3 lg:columns-4 gap-3 [&>*]:mb-3">
         {items.map((t) => (

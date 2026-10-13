@@ -20,7 +20,7 @@ function Detail() {
     <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24 space-y-8">
       <Link href="/cuenta/pedidos" className="text-on-surface-variant hover:text-primary text-sm">← Mis pedidos</Link>
       <div>
-        <h1 className="font-serif text-headline-lg">Pedido #{o.order_number}</h1>
+        <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg">Pedido #{o.order_number}</h1>
         <p className="text-primary uppercase tracking-widest text-sm">{STATUS_LABELS[o.status]}</p>
         {o.tracking_code && <p className="text-on-surface-variant mt-1">Guía {o.carrier ? `(${o.carrier}) ` : ""}: <b>{o.tracking_code}</b></p>}
       </div>

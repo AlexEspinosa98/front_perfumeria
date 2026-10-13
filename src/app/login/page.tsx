@@ -5,11 +5,12 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { api } from "@/lib/api";
+import { safeNext } from "@/lib/session";
 
 function LoginForm() {
   const router = useRouter();
   const { login } = useAuth();
-  const next = useSearchParams().get("next") ?? "/cuenta";
+  const next = safeNext(useSearchParams().get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

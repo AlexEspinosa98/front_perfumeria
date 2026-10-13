@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Footer from "@/components/nav/Footer";
-import ProductImage from "@/components/ui/ProductImage";
+import Gallery from "@/components/ui/Gallery";
 import { useCart } from "@/components/CartProvider";
 import ProductReviews from "@/components/ProductReviews";
 import { api, cop, Perfume } from "@/lib/api";
@@ -31,20 +31,18 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-16 md:pb-section-gap">
         <Link href="/colecciones" className="flex items-center gap-stack-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors mb-stack-lg w-fit">
           <span className="material-symbols-outlined text-lg">arrow_back</span> Catálogo
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-margin-desktop items-start">
-          <div className="aspect-square bg-surface-container-lowest ghost-border flex items-center justify-center p-12">
-            <ProductImage src={p.image_url} alt={p.name} className="w-full h-full object-contain" />
-          </div>
+          <Gallery images={p.images?.length ? p.images : p.image_url ? [p.image_url] : []} alt={p.name} />
 
           <div className="space-y-stack-lg lg:sticky lg:top-32">
             <div>
               <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">{p.brand || "Bahía Perfumes"}</p>
-              <h1 className="font-serif text-headline-lg text-on-surface mb-stack-sm">{p.name}</h1>
+              <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg text-on-surface mb-stack-sm">{p.name}</h1>
               {p.presentation && <p className="font-sans text-body-md text-on-surface-variant">{p.presentation}</p>}
               <div className="flex gap-2 flex-wrap mt-3">
                 {p.categories?.map((c) => (

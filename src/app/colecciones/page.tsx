@@ -42,10 +42,10 @@ function Catalog() {
 
   return (
     <>
-      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-16 md:pb-section-gap">
         <header className="mb-10 border-b border-outline-variant/20 pb-stack-md">
           <p className="font-sans text-label-sm uppercase tracking-[0.3em] text-primary mb-stack-sm">Bahía Perfumes</p>
-          <h1 className="font-serif text-headline-lg text-on-surface">Nuestro Catálogo</h1>
+          <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg text-on-surface">Nuestro Catálogo</h1>
         </header>
 
         <form id="buscar" onSubmit={(e) => { e.preventDefault(); go({ q: search }); }} className="flex gap-3 mb-6 max-w-xl">

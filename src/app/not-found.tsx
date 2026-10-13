@@ -6,7 +6,7 @@ export default function NotFound() {
       <p className="font-sans text-label-sm uppercase tracking-[0.4em] text-primary mb-stack-sm">
         404
       </p>
-      <h1 className="font-serif text-headline-lg text-on-surface mb-stack-md">
+      <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg text-on-surface mb-stack-md">
         Página no encontrada
       </h1>
       <p className="font-sans text-body-md text-on-surface-variant mb-8 max-w-sm">

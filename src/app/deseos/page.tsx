@@ -20,7 +20,7 @@ export default function DeseosPage() {
   return (
     <>
       <main className="pt-[190px] min-h-screen px-5 md:px-12 max-w-container-max mx-auto pb-24">
-        <h1 className="font-serif text-headline-lg border-b border-outline-variant pb-3 mb-8">Mis deseos</h1>
+        <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg border-b border-outline-variant pb-3 mb-8">Mis deseos</h1>
         {items === null ? <p className="text-outline">Cargando…</p> : items.length === 0 ? (
           <div className="text-center py-20">
             <span className="material-symbols-outlined text-6xl text-outline/40 block mb-4">favorite</span>

@@ -7,11 +7,14 @@ import { useAuth } from "@/components/AuthProvider";
 import { useCart } from "@/components/CartProvider";
 import ProductImage from "@/components/ui/ProductImage";
 import { api, cop, Order } from "@/lib/api";
+import { useStore } from "@/lib/useStore";
 
 export default function CarritoPage() {
   const { lines, setQty, subtotal, clear } = useCart();
   const { profile, loading } = useAuth();
+  const store = useStore();
   const [notes, setNotes] = useState("");
+  const [guestName, setGuestName] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [placed, setPlaced] = useState<{ order: Order; whatsapp_url: string | null; via: "reserve" | "whatsapp" } | null>(null);
@@ -33,6 +36,13 @@ export default function CarritoPage() {
     }
   };
 
+  // Pedido sin registro: no crea cuenta ni pedido en el sistema; abre WhatsApp con el pedido ya escrito.
+  const guestWhatsapp = () => {
+    const rows = lines.map((l) => `• ${l.qty} x ${l.name} (${cop(l.price * l.qty)})`).join("\n");
+    const text = `Hola, quiero hacer un pedido en Bahía Perfumes${guestName.trim() ? ` (soy ${guestName.trim()})` : ""}:\n${rows}\nTotal: ${cop(subtotal)}${notes.trim() ? `\nNotas: ${notes.trim()}` : ""}\n¿Me confirman disponibilidad, pago y envío?`;
+    window.open(`https://wa.me/${store.whatsapp_number ?? ""}?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
   if (placed)
     return (
       <>
@@ -51,9 +61,9 @@ export default function CarritoPage() {
 
   return (
     <>
-      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-section-gap">
+      <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-container-max mx-auto pb-16 md:pb-section-gap">
         <header className="mb-stack-lg border-b border-outline-variant/20 pb-stack-md">
-          <h2 className="font-serif text-headline-lg text-primary">Tu Bolsa de Compra</h2>
+          <h2 className="font-serif text-headline-lg-mobile md:text-headline-lg text-primary">Tu Bolsa de Compra</h2>
         </header>
 
         {lines.length === 0 ? (
@@ -64,9 +74,9 @@ export default function CarritoPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-margin-desktop">
-            <div className="lg:col-span-8 space-y-stack-lg">
+            <div className="lg:col-span-8 space-y-6 md:space-y-stack-lg">
               {lines.map((l) => (
-                <div key={l.id} className="flex items-center gap-gutter border-b border-outline-variant/10 pb-stack-lg">
+                <div key={l.id} className="flex items-center gap-4 md:gap-gutter border-b border-outline-variant/10 pb-6 md:pb-stack-lg">
                   <div className="w-24 h-32 bg-surface-container-high ghost-border flex-shrink-0">
                     <ProductImage src={l.image_url} alt={l.name} className="w-full h-full object-contain p-2" />
                   </div>
@@ -91,7 +101,7 @@ export default function CarritoPage() {
             </div>
 
             <div className="lg:col-span-4">
-              <div className="bg-surface-container-low p-stack-lg ghost-border sticky top-32 space-y-5">
+              <div className="bg-surface-container-low p-5 md:p-stack-lg ghost-border lg:sticky lg:top-44 space-y-5">
                 <h3 className="font-serif text-headline-sm uppercase tracking-widest pb-3 border-b border-outline-variant/20">Resumen</h3>
                 <div className="flex justify-between text-on-surface-variant"><span>Subtotal</span><span>{cop(subtotal)}</span></div>
                 <div className="flex justify-between text-on-surface-variant"><span>Envío</span><span className="text-primary italic">Se coordina por WhatsApp</span></div>
@@ -102,7 +112,23 @@ export default function CarritoPage() {
                 <div><label className="field-label">Notas del pedido (opcional)</label><textarea className="field" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} /></div>
                 {error && <p className="text-sm text-error">{error}</p>}
                 {loading ? null : !profile ? (
-                  <Link href="/login?next=/carrito" className="btn-gold w-full">Ingresa para hacer el pedido</Link>
+                  <div className="space-y-3">
+                    <p className="font-sans text-[11px] uppercase tracking-[0.18em] font-bold">¿Cómo quieres pedir?</p>
+                    <div className="border border-outline-variant p-3 space-y-2">
+                      <p className="text-sm font-bold">Con cuenta (recomendado)</p>
+                      <p className="text-[12px] text-on-surface-variant">Reservas tu pedido, ves el seguimiento y la próxima vez no repites tus datos.</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Link href="/registro?next=/carrito" className="btn-gold !px-3">Crear cuenta</Link>
+                        <Link href="/login?next=/carrito" className="btn-ghost !px-3">Ingresar</Link>
+                      </div>
+                    </div>
+                    <div className="border border-outline-variant p-3 space-y-2">
+                      <p className="text-sm font-bold">Sin registro</p>
+                      <p className="text-[12px] text-on-surface-variant">Te llevamos a WhatsApp con tu pedido ya escrito. Lo confirmamos por ahí.</p>
+                      <input className="field" placeholder="Tu nombre (opcional)" maxLength={80} value={guestName} onChange={(e) => setGuestName(e.target.value)} />
+                      <button onClick={guestWhatsapp} className="btn-ghost w-full"><span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp sin registro</button>
+                    </div>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     <button onClick={() => checkout("reserve")} disabled={busy} className="btn-gold w-full">

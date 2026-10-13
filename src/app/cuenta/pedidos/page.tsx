@@ -13,7 +13,7 @@ function Orders() {
 
   return (
     <main className="pt-[190px] min-h-screen px-5 md:px-20 max-w-3xl mx-auto pb-24">
-      <h1 className="font-serif text-headline-lg mb-8">Mis pedidos</h1>
+      <h1 className="font-serif text-headline-lg-mobile md:text-headline-lg mb-8">Mis pedidos</h1>
       {error && <p className="text-error">{error}</p>}
       {orders === null ? <p className="text-on-surface-variant">Cargando…</p> : orders.length === 0 ? (
         <p className="text-on-surface-variant">Aún no tienes pedidos. <Link href="/colecciones" className="text-primary">Ver catálogo</Link></p>

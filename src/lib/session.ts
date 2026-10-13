@@ -49,3 +49,8 @@ export async function getAccessToken(): Promise<string | null> {
   if (s.expires_at - 60 < Date.now() / 1000) s = await refreshSession();
   return s?.access_token ?? null;
 }
+
+/** Solo rutas internas (evita redirecciones a otros sitios vía ?next=). */
+export function safeNext(next: string | null | undefined, fallback = "/cuenta"): string {
+  return next && next.startsWith("/") && !next.startsWith("//") && !next.includes("\\") ? next : fallback;
+}

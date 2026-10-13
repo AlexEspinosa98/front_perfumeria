@@ -116,7 +116,7 @@ html.dark {
     @apply block font-sans text-label-sm uppercase tracking-widest text-on-surface-variant mb-1;
   }
   .btn-gold {
-    @apply px-8 py-3.5 font-sans text-label-sm uppercase tracking-[0.2em] transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2 border;
+    @apply px-5 md:px-8 py-3.5 font-sans text-[11px] md:text-label-sm uppercase tracking-[0.12em] md:tracking-[0.2em] transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2 border;
     background: rgb(var(--c-primary));
     color: rgb(var(--c-on-primary));
     border-color: rgb(var(--c-primary));
@@ -126,7 +126,7 @@ html.dark {
     color: rgb(var(--c-primary));
   }
   .btn-ghost {
-    @apply px-5 py-2.5 border font-sans text-label-sm uppercase tracking-widest transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
+    @apply px-4 md:px-5 py-2.5 border font-sans text-[11px] md:text-label-sm uppercase tracking-[0.1em] md:tracking-widest transition-colors disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-2;
     border-color: rgb(var(--c-primary));
     color: rgb(var(--c-primary));
   }

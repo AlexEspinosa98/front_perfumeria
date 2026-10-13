@@ -11,7 +11,7 @@ import { DEFAULT_ANNOUNCEMENT, useStore } from "@/lib/useStore";
 
 const CHIPS: [string, string][] = [
   ["Promociones", "promociones"], ["Nuevo", "nuevos"], ["Hombres", "hombres"],
-  ["Mujeres", "mujeres"], ["Attar & Oud", "attar-oud"],
+  ["Mujeres", "mujeres"],
 ];
 
 const TABS = [

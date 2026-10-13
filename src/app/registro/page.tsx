@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import { safeNext } from "@/lib/session";
 
 export default function RegistroPage() {
   const { register } = useAuth();
@@ -24,7 +25,7 @@ export default function RegistroPage() {
         data_consent: true, marketing_consent: marketing,
       });
       if (needsConfirmation) setDone(true);
-      else window.location.href = "/cuenta";
+      else window.location.href = safeNext(new URLSearchParams(window.location.search).get("next"));
     } catch (err: any) {
       setError(err.message);
     }

@@ -24,10 +24,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <RequireAuth admin>
       <main className="pt-[190px] min-h-screen px-5 md:px-12 max-w-container-max mx-auto pb-24">
         <h1 className="font-serif text-headline-md mb-5">Panel de administración</h1>
-        <nav className="flex gap-2 flex-wrap border-b border-outline-variant/20 pb-4 mb-8">
+        <nav className="flex gap-2 overflow-x-auto no-scrollbar border-b border-outline-variant/20 pb-4 mb-8 -mx-5 px-5 md:mx-0 md:px-0">
           {tabs.map(([href, label]) => (
             <Link key={href} href={href}
-              className={`px-4 py-2 border font-sans text-label-sm uppercase tracking-widest ${path.startsWith(href) ? "border-primary text-primary bg-primary/10" : "border-outline-variant/30 text-on-surface-variant hover:text-primary"}`}>
+              className={`shrink-0 whitespace-nowrap px-4 py-2 border font-sans text-label-sm uppercase tracking-widest ${path.startsWith(href) ? "border-primary text-primary bg-primary/10" : "border-outline-variant/30 text-on-surface-variant hover:text-primary"}`}>
               {label}{href === "/admin/pedidos" && pending > 0 && <span className="ml-2 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">{pending}</span>}
             </Link>
           ))}
