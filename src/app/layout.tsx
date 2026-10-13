@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bodoni_Moda, Hanken_Grotesk } from "next/font/google";
 import "@/styles/globals.css";
 import Navbar from "@/components/nav/Navbar";
+import WhatsAppFab from "@/components/WhatsAppFab";
 import ThemeProvider from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
 import CartProvider from "@/components/CartProvider";
@@ -48,6 +49,7 @@ export default function RootLayout({
             <CartProvider>
               <WishlistProvider>
                   <Navbar />
+                  <WhatsAppFab />
               {children}
               </WishlistProvider>
             </CartProvider>

@@ -8,10 +8,12 @@ import Gallery from "@/components/ui/Gallery";
 import { useCart } from "@/components/CartProvider";
 import ProductReviews from "@/components/ProductReviews";
 import { api, cop, Perfume } from "@/lib/api";
+import { useStore, waLink } from "@/lib/useStore";
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { add } = useCart();
+  const store = useStore();
   const [p, setP] = useState<Perfume | null>(null);
   const [error, setError] = useState("");
   const [added, setAdded] = useState(false);
@@ -69,6 +71,12 @@ export default function ProductDetailPage() {
                 <span className="material-symbols-outlined text-xl">{added ? "check" : "shopping_bag"}</span>
                 {!p.in_stock ? "Agotado" : added ? "Agregado" : "Agregar a la Bolsa"}
               </button>
+              <a
+                href={waLink(store.whatsapp_number, `Hola, me interesa ${p.name}${p.presentation ? ` (${p.presentation})` : ""} — ${cop(p.price)}. ¿Está disponible?`)}
+                target="_blank" rel="noopener noreferrer" className="btn-ghost w-full mt-3"
+              >
+                <span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp (sin registro)
+              </a>
             </div>
           </div>
         </div>

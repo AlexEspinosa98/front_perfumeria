@@ -25,7 +25,7 @@ function OrderRow({ o, waTpls, onChanged }: { o: Order; waTpls: Tpl[]; onChanged
     } catch (e: any) { setMsg(e.message); }
   };
   const wa = async () => {
-    try { const r = await api<{ url: string }>(`/admin/orders/${o.id}/whatsapp?template_id=${tpl || waTpls[0]?.id}`); window.open(r.url, "_blank"); }
+    try { const r = await api<{ url: string }>(`/admin/orders/${o.id}/whatsapp?template_id=${tpl || waTpls[0]?.id}`); { if (!window.open(r.url, "_blank")) window.location.href = r.url; } }
     catch (e: any) { setMsg(e.message); }
   };
 

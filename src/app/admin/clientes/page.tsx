@@ -28,7 +28,7 @@ export default function ClientesAdmin() {
   }, [q, marketing]);
 
   const sendWa = async (id: string) => {
-    try { const r = await api<{ url: string }>(`/admin/customers/${id}/whatsapp?template_id=${waSel}`); window.open(r.url, "_blank"); } catch (e: any) { setMsg(e.message); }
+    try { const r = await api<{ url: string }>(`/admin/customers/${id}/whatsapp?template_id=${waSel}`); { if (!window.open(r.url, "_blank")) window.location.href = r.url; } } catch (e: any) { setMsg(e.message); }
   };
   const sendEmail = async (id: string) => {
     try { const r = await api<{ sent: boolean; error?: string }>("/admin/emails/send", { method: "POST", json: { template_id: emSel, user_id: id } }); setMsg(r.sent ? "Correo enviado ✓" : `No se envió: ${r.error}`); } catch (e: any) { setMsg(e.message); }

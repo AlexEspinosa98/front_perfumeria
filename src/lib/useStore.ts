@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 
 export type StoreInfo = { whatsapp_number?: string; store_name?: string; announcement?: string; instagram_url?: string; facebook_url?: string };
+export const DEFAULT_WHATSAPP = "573218137847";
+export const waLink = (number: string | undefined, text: string) =>
+  `https://wa.me/${(number || DEFAULT_WHATSAPP).replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
 export const DEFAULT_ANNOUNCEMENT = "Envíos a todo Colombia • Pedidos y pagos por WhatsApp";
 
 let cache: StoreInfo | null = null;
@@ -15,5 +18,5 @@ export function useStore(): StoreInfo {
     if (cache) return;
     api<StoreInfo>("/store", { auth: false }).then((s) => { cache = s; setStore(s); }).catch(() => {});
   }, []);
-  return store;
+  return { ...store, whatsapp_number: store.whatsapp_number || DEFAULT_WHATSAPP };
 }

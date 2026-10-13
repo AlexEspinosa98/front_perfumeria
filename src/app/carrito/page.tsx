@@ -7,7 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useCart } from "@/components/CartProvider";
 import ProductImage from "@/components/ui/ProductImage";
 import { api, cop, Order } from "@/lib/api";
-import { useStore } from "@/lib/useStore";
+import { useStore, waLink } from "@/lib/useStore";
 
 export default function CarritoPage() {
   const { lines, setQty, subtotal, clear } = useCart();
@@ -28,7 +28,6 @@ export default function CarritoPage() {
       });
       clear();
       setPlaced({ ...res, via });
-      if (via === "whatsapp" && res.whatsapp_url) window.open(res.whatsapp_url, "_blank");
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -36,12 +35,12 @@ export default function CarritoPage() {
     }
   };
 
-  // Pedido sin registro: no crea cuenta ni pedido en el sistema; abre WhatsApp con el pedido ya escrito.
-  const guestWhatsapp = () => {
+  // Pedido sin registro: no crea cuenta; es un enlace directo a WhatsApp con el pedido ya escrito.
+  const guestHref = (() => {
     const rows = lines.map((l) => `• ${l.qty} x ${l.name} (${cop(l.price * l.qty)})`).join("\n");
-    const text = `Hola, quiero hacer un pedido en Bahía Perfumes${guestName.trim() ? ` (soy ${guestName.trim()})` : ""}:\n${rows}\nTotal: ${cop(subtotal)}${notes.trim() ? `\nNotas: ${notes.trim()}` : ""}\n¿Me confirman disponibilidad, pago y envío?`;
-    window.open(`https://wa.me/${store.whatsapp_number ?? ""}?text=${encodeURIComponent(text)}`, "_blank");
-  };
+    return waLink(store.whatsapp_number,
+      `Hola, quiero hacer un pedido en Bahía Perfumes${guestName.trim() ? ` (soy ${guestName.trim()})` : ""}:\n${rows}\nTotal: ${cop(subtotal)}${notes.trim() ? `\nNotas: ${notes.trim()}` : ""}\n¿Me confirman disponibilidad, pago y envío?`);
+  })();
 
   if (placed)
     return (
@@ -51,7 +50,7 @@ export default function CarritoPage() {
           <h1 className="font-serif text-headline-md my-4">Pedido #{placed.order.order_number} recibido</h1>
           <p className="text-on-surface-variant mb-8">{placed.via === "reserve" ? "Tu pedido quedó reservado. Te contactaremos pronto por WhatsApp o teléfono para coordinar el pago y el envío." : "Coordinaremos el pago y el envío por WhatsApp."} Puedes seguir el estado en «Mis pedidos».</p>
           <div className="flex flex-col gap-3 items-center">
-            {placed.whatsapp_url && <a href={placed.whatsapp_url} target="_blank" rel="noreferrer" className={placed.via === "reserve" ? "btn-ghost" : "btn-gold"}>{placed.via === "reserve" ? "Escribirnos ahora por WhatsApp" : "Abrir WhatsApp para confirmar"}</a>}
+            {placed.whatsapp_url && <a href={placed.whatsapp_url} target="_blank" rel="noopener noreferrer" className={placed.via === "reserve" ? "btn-ghost" : "btn-gold"}>{placed.via === "reserve" ? "Escribirnos ahora por WhatsApp" : "Toca aquí para abrir WhatsApp y enviar tu pedido"}</a>}
             <Link href={`/cuenta/pedidos/${placed.order.id}`} className="btn-ghost">Ver seguimiento</Link>
           </div>
         </main>
@@ -114,19 +113,17 @@ export default function CarritoPage() {
                 {loading ? null : !profile ? (
                   <div className="space-y-3">
                     <p className="font-sans text-[11px] uppercase tracking-[0.18em] font-bold">¿Cómo quieres pedir?</p>
-                    <div className="border border-outline-variant p-3 space-y-2">
-                      <p className="text-sm font-bold">Con cuenta (recomendado)</p>
-                      <p className="text-[12px] text-on-surface-variant">Reservas tu pedido, ves el seguimiento y la próxima vez no repites tus datos.</p>
+                    <div className="space-y-2">
+                      <input className="field" placeholder="Tu nombre (opcional)" maxLength={80} value={guestName} onChange={(e) => setGuestName(e.target.value)} />
+                      <a href={guestHref} target="_blank" rel="noopener noreferrer" className="btn-gold w-full"><span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp (sin registro)</a>
+                      <p className="text-[12px] text-on-surface-variant">No necesitas cuenta: se abre WhatsApp con tu pedido ya escrito y lo confirmamos por ahí.</p>
+                    </div>
+                    <div className="border-t border-outline-variant pt-3 space-y-2">
+                      <p className="text-[12px] text-on-surface-variant">O crea una cuenta para <b>reservar</b> tu pedido, ver su seguimiento y no repetir tus datos.</p>
                       <div className="grid grid-cols-2 gap-2">
-                        <Link href="/registro?next=/carrito" className="btn-gold !px-3">Crear cuenta</Link>
+                        <Link href="/registro?next=/carrito" className="btn-ghost !px-3">Crear cuenta</Link>
                         <Link href="/login?next=/carrito" className="btn-ghost !px-3">Ingresar</Link>
                       </div>
-                    </div>
-                    <div className="border border-outline-variant p-3 space-y-2">
-                      <p className="text-sm font-bold">Sin registro</p>
-                      <p className="text-[12px] text-on-surface-variant">Te llevamos a WhatsApp con tu pedido ya escrito. Lo confirmamos por ahí.</p>
-                      <input className="field" placeholder="Tu nombre (opcional)" maxLength={80} value={guestName} onChange={(e) => setGuestName(e.target.value)} />
-                      <button onClick={guestWhatsapp} className="btn-ghost w-full"><span className="material-symbols-outlined text-lg">chat</span>Pedir por WhatsApp sin registro</button>
                     </div>
                   </div>
                 ) : (
