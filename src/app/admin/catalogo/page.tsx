@@ -6,12 +6,93 @@ import { api, Category, cop, Perfume } from "@/lib/api";
 
 const empty = { name: "", brand: "", description: "", presentation: "", price: 0, images: [] as string[], badge: "", is_active: true, is_featured: false, stock: 0, cost: 0, category_ids: [] as string[] };
 
+/** Stock editable en la fila: escribe la cantidad (o usa − / +) y pulsa «Actualizar». No abre la ficha del perfume. */
+function StockCell({ p, onSaved, onError }: { p: Perfume; onSaved: (id: string, stock: number) => void; onError: (m: string) => void }) {
+  const current = p.stock ?? 0;
+  const [val, setVal] = useState(String(current));
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { setVal(String(current)); }, [current]);
+  const n = Math.max(0, Math.floor(Number(val) || 0));
+  const changed = val !== "" && n !== current;
+
+  const save = async () => {
+    setBusy(true);
+    try {
+      await api("/admin/stock/adjust", { method: "POST", json: { items: [{ perfume_id: p.id, set_to: n }] } });
+      onSaved(p.id, n);
+    } catch (e: any) { onError(e.message); setVal(String(current)); }
+    setBusy(false);
+  };
+
+  return (
+    <div className="flex items-center gap-1" title="Stock">
+      <button className="chip" aria-label="Menos uno" onClick={() => setVal(String(Math.max(0, n - 1)))}>−</button>
+      <input
+        type="number" min={0} inputMode="numeric" aria-label={`Stock de ${p.name}`} value={val}
+        onChange={(e) => setVal(e.target.value)} onKeyDown={(e) => e.key === "Enter" && changed && save()}
+        className={`w-16 text-center border border-outline-variant bg-transparent py-1.5 text-sm font-bold ${current === 0 ? "text-error" : current <= 3 ? "underline" : ""}`}
+      />
+      <button className="chip" aria-label="Más uno" onClick={() => setVal(String(n + 1))}>+</button>
+      {changed && <button className="btn-gold !py-1.5 !px-3" disabled={busy} onClick={save}>{busy ? "…" : "Actualizar"}</button>}
+    </div>
+  );
+}
+
+/** Reponer stock de varios perfumes a la vez: solo escribes cuántas unidades llegaron. */
+function RestockPanel({ items, onDone, onClose }: { items: Perfume[]; onDone: () => void; onClose: () => void }) {
+  const [q, setQ] = useState("");
+  const [add, setAdd] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const rows = items.filter((p) => !q || `${p.name} ${p.brand}`.toLowerCase().includes(q.toLowerCase()));
+  const entries = Object.entries(add).map(([id, v]) => ({ id, n: Math.floor(Number(v) || 0) })).filter((x) => x.n > 0);
+
+  const save = async () => {
+    setBusy(true); setMsg("");
+    try {
+      await api("/admin/stock/adjust", { method: "POST", json: { items: entries.map((x) => ({ perfume_id: x.id, delta: x.n })) } });
+      onDone();
+    } catch (e: any) { setMsg(e.message); }
+    setBusy(false);
+  };
+
+  return (
+    <section className="panel space-y-4">
+      <div className="flex justify-between items-start gap-3 flex-wrap">
+        <div><h2 className="font-serif text-headline-sm">Reponer stock</h2><p className="text-xs text-on-surface-variant">Escribe cuántas unidades llegaron de cada perfume y guarda todo de una vez.</p></div>
+        <button className="btn-ghost" onClick={onClose}>Cerrar</button>
+      </div>
+      <input className="field" placeholder="Buscar perfume…" value={q} onChange={(e) => setQ(e.target.value)} />
+      <div className="divide-y divide-outline-variant/50">
+        {rows.map((p) => {
+          const n = Math.floor(Number(add[p.id]) || 0);
+          return (
+            <div key={p.id} className="flex items-center gap-3 py-2 flex-wrap">
+              <div className="flex-grow min-w-[140px]"><p className="font-serif leading-tight">{p.name}</p><p className="text-xs text-on-surface-variant">Hay {p.stock ?? 0}{n > 0 && <b className="text-primary"> → {(p.stock ?? 0) + n}</b>}</p></div>
+              <label className="flex items-center gap-2 text-xs uppercase tracking-widest text-on-surface-variant">+ llegaron
+                <input type="number" min={0} inputMode="numeric" className="w-20 text-center border border-outline-variant bg-transparent py-1.5 text-sm font-bold text-on-surface" value={add[p.id] ?? ""} onChange={(e) => setAdd({ ...add, [p.id]: e.target.value })} />
+              </label>
+            </div>
+          );
+        })}
+        {rows.length === 0 && <p className="py-3 text-sm text-on-surface-variant">No hay perfumes con ese nombre.</p>}
+      </div>
+      {msg && <p className="text-sm text-error">{msg}</p>}
+      <div className="flex items-center gap-3 flex-wrap">
+        <button className="btn-gold" disabled={busy || entries.length === 0} onClick={save}>{busy ? "Guardando…" : `Guardar reposición (${entries.length})`}</button>
+        {entries.length > 0 && <button className="btn-ghost" onClick={() => setAdd({})}>Limpiar</button>}
+      </div>
+    </section>
+  );
+}
+
 export default function CatalogoAdmin() {
   const [items, setItems] = useState<Perfume[]>([]);
   const [cats, setCats] = useState<Category[]>([]);
   const [editing, setEditing] = useState<string | null>(null); // id | "new"
   const [form, setForm] = useState({ ...empty });
   const [newCat, setNewCat] = useState("");
+  const [restock, setRestock] = useState(false);
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -57,12 +138,6 @@ export default function CatalogoAdmin() {
       setEditing(null); await load();
     } catch (e: any) { setMsg(e.message); }
     setBusy(false);
-  };
-
-  const adjust = async (p: Perfume, delta: number) => {
-    const stock = Math.max(0, (p.stock ?? 0) + delta);
-    setItems((prev) => prev.map((x) => (x.id === p.id ? { ...x, stock, in_stock: stock > 0 } : x)));
-    try { await api(`/admin/perfumes/${p.id}`, { method: "PATCH", json: { stock } }); } catch (e: any) { setMsg(e.message); load(); }
   };
 
   const remove = async (p: Perfume) => {
@@ -147,7 +222,8 @@ export default function CatalogoAdmin() {
         </form>
       ) : (
         <section>
-          <div className="flex justify-between items-center mb-4"><h2 className="font-serif text-headline-sm">Perfumes ({items.length})</h2><button className="btn-gold" onClick={() => edit(null)}>Nuevo perfume</button></div>
+          <div className="flex justify-between items-center mb-4"><h2 className="font-serif text-headline-sm">Perfumes ({items.length})</h2><div className="flex gap-2 flex-wrap"><button className="btn-ghost" onClick={() => setRestock(!restock)}>{restock ? "Ocultar reposición" : "Reponer stock"}</button><button className="btn-gold" onClick={() => edit(null)}>Nuevo perfume</button></div></div>
+          {restock && <div className="mb-6"><RestockPanel items={items} onClose={() => setRestock(false)} onDone={() => { setRestock(false); load(); }} /></div>}
           <div className="space-y-2">
             {items.map((p) => (
               <div key={p.id} className="panel flex items-center gap-3 flex-wrap">
@@ -156,11 +232,7 @@ export default function CatalogoAdmin() {
                   <p className="font-serif">{p.name} <span className="text-xs text-on-surface-variant">{p.brand}</span></p>
                   <p className="text-xs text-on-surface-variant">{cop(p.price)} · costo {cop(p.cost ?? 0)}{Number(p.cost ?? 0) === 0 && " ⚠️"} · {p.categories?.map((c) => c.name).join(", ") || "sin categoría"}{!p.is_active && " · OCULTO"}</p>
                 </div>
-                <div className="flex items-center gap-1" title="Stock">
-                  <button className="chip" aria-label="Quitar una unidad" onClick={() => adjust(p, -1)}>−</button>
-                  <span className={`min-w-[44px] text-center text-sm font-bold ${(p.stock ?? 0) === 0 ? "text-error" : (p.stock ?? 0) <= 3 ? "text-primary underline" : ""}`}>{p.stock ?? 0} uds</span>
-                  <button className="chip" aria-label="Agregar una unidad" onClick={() => adjust(p, 1)}>+</button>
-                </div>
+                <StockCell p={p} onSaved={(id, stock) => setItems((prev) => prev.map((x) => (x.id === id ? { ...x, stock, in_stock: stock > 0 } : x)))} onError={setMsg} />
                 <button className="btn-ghost" onClick={() => edit(p)}>Editar</button>
                 <button className="btn-ghost !text-error" onClick={() => remove(p)}>Eliminar</button>
               </div>

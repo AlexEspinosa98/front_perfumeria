@@ -81,7 +81,7 @@ export type Testimonial = { id: string; image_url: string; author: string; capti
 export type SaleItem = { id: string; perfume_id: string | null; name: string; quantity: number; unit_price: number; unit_cost: number };
 export type Sale = {
   id: string; sold_at: string; channel: "web" | "whatsapp" | "presencial" | "otro"; customer_name: string; note: string;
-  order_id: string | null; sale_items: SaleItem[]; revenue: number; cost: number; profit: number;
+  order_id: string | null; stock_decremented?: boolean; sale_items: SaleItem[]; revenue: number; cost: number; profit: number;
 };
 export type Expense = { id: string; spent_at: string; amount: number; reason: string; category: string; note: string };
 export type Summary = {
